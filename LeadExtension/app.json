@@ -1,7 +1,7 @@
 {
-  "id": "REPLACE-WITH-A-NEW-GUID",
+  "id": "c0cfe499-e1ec-4770-a4ff-d90b10921760",
   "name": "LAAI Leads",
-  "publisher": "REPLACE-WITH-YOUR-PUBLISHER-NAME",
+  "publisher": "LAAI",
   "version": "1.0.0.0",
   "brief": "Lead tracking for Business Central.",
   "description": "Adds a Lead entity with Card/List pages, reachable from the main navigation.",
