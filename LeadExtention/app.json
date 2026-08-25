@@ -1,10 +1,10 @@
 {
-  "id": "3f0f2a20-2465-4576-9531-d7cd932a300d",
-  "name": "LeadExtention",
-  "publisher": "LAAI",
+  "id": "REPLACE-WITH-A-NEW-GUID",
+  "name": "LAAI Leads",
+  "publisher": "REPLACE-WITH-YOUR-PUBLISHER-NAME",
   "version": "1.0.0.0",
-  "brief": "",
-  "description": "",
+  "brief": "Lead tracking for Business Central.",
+  "description": "Adds a Lead entity with Card/List pages, reachable from the main navigation.",
   "privacyStatement": "",
   "EULA": "",
   "help": "",
@@ -13,19 +13,17 @@
   "dependencies": [],
   "screenshots": [],
   "platform": "1.0.0.0",
-  "application": "22.0.0.0",
+  "application": "1.0.0.0",
   "idRanges": [
     {
       "from": 50100,
       "to": 50149
     }
   ],
-  "features": [
-    "NoImplicitWith"
-  ],
   "resourceExposurePolicy": {
     "allowDebugging": true,
-    "allowDownloadingSource": false,
-    "includeSourceInSymbolFile": false
-  }
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "13.0"
 }
