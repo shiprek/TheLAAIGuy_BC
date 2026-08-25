@@ -1,0 +1,29 @@
+{
+  "id": "REPLACE-WITH-A-NEW-GUID",
+  "name": "LAAI Leads",
+  "publisher": "REPLACE-WITH-YOUR-PUBLISHER-NAME",
+  "version": "1.0.0.0",
+  "brief": "Lead tracking for Business Central.",
+  "description": "Adds a Lead entity with Card/List pages, reachable from the main navigation.",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "1.0.0.0",
+  "idRanges": [
+    {
+      "from": 50100,
+      "to": 50149
+    }
+  ],
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "runtime": "13.0"
+}
