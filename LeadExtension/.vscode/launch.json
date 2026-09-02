@@ -1,5 +1,33 @@
 {
     "version": "0.2.0",
     "configurations": [
+        {
+            "name": "DEV (Cloud Sandbox)",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "Sandbox",
+            "environmentName": "DEV",
+            "tenant": "895c4834-d9e2-4a0b-87de-4007571d1a6b",
+            "authentication": "AAD",
+            "startupObjectId": 50101,
+            "startupObjectType": "Page",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "schemaUpdateMode": "Synchronize"
+        },
+        {
+            "name": "TEST (Cloud Sandbox)",
+            "type": "al",
+            "request": "launch",
+            "environmentType": "Sandbox",
+            "environmentName": "TEST",
+            "tenant": "895c4834-d9e2-4a0b-87de-4007571d1a6b",
+            "authentication": "AAD",
+            "startupObjectId": 50101,
+            "startupObjectType": "Page",
+            "breakOnError": true,
+            "launchBrowser": true,
+            "schemaUpdateMode": "Synchronize"
+        }
     ]
 }
