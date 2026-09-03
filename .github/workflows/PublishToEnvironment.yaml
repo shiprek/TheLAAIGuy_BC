@@ -112,14 +112,15 @@ jobs:
           }
           else {
             Write-Host "No AuthContext provided for $envName, initiating Device Code flow"
-            $ALGoHelperPath = "$([System.IO.Path]::GetTempFileName()).ps1"
+            # Preserve AL-Go's module layout so all companion dependencies are imported.
+            $helperFolder = Join-Path $env:RUNNER_TEMP ("AL-Go-Auth-" + [Guid]::NewGuid().ToString())
+            New-Item -ItemType Directory -Path (Join-Path $helperFolder '.Modules') -Force | Out-Null
             $webClient = New-Object System.Net.WebClient
-            $webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/AL-Go-Helper.ps1', $ALGoHelperPath)
-            # AL-Go's standalone helper requires the retry functions from Github-Helper.
-            $gitHubHelperPath = Join-Path ([System.IO.Path]::GetTempPath()) ("Github-Helper-" + [Guid]::NewGuid().ToString() + ".psm1")
-            $webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/Github-Helper.psm1', $gitHubHelperPath)
-            Import-Module $gitHubHelperPath -Force
-            . $ALGoHelperPath
+            foreach ($helperFile in @('AL-Go-Helper.ps1', 'Github-Helper.psm1', '.Modules/ReadSettings.psm1', '.Modules/DebugLogHelper.psm1')) {
+              $webClient.DownloadFile("https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/$helperFile", (Join-Path $helperFolder $helperFile))
+            }
+            . (Join-Path $helperFolder 'AL-Go-Helper.ps1')
+            Get-Command Invoke-CommandWithRetry, OutputDebug, Expand-7zipArchive -ErrorAction Stop | Out-Null
             DownloadAndImportBcContainerHelper
             $authContext = New-BcAuthContext -includeDeviceLogin -deviceLoginTimeout ([TimeSpan]::FromSeconds(0))
             Add-Content -Encoding UTF8 -path $ENV:GITHUB_STEP_SUMMARY -value "AL-Go needs access to the Business Central Environment $('${{ steps.envName.outputs.envName }}'.Split(' ')[0]) and could not locate a secret called ${{ steps.envName.outputs.envName }}_AuthContext`n`n$($authContext.message)"
