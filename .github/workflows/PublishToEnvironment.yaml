@@ -115,6 +115,10 @@ jobs:
             $ALGoHelperPath = "$([System.IO.Path]::GetTempFileName()).ps1"
             $webClient = New-Object System.Net.WebClient
             $webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/AL-Go-Helper.ps1', $ALGoHelperPath)
+            # AL-Go's standalone helper requires the retry functions from Github-Helper.
+            $gitHubHelperPath = Join-Path ([System.IO.Path]::GetTempPath()) ("Github-Helper-" + [Guid]::NewGuid().ToString() + ".psm1")
+            $webClient.DownloadFile('https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/Github-Helper.psm1', $gitHubHelperPath)
+            Import-Module $gitHubHelperPath -Force
             . $ALGoHelperPath
             DownloadAndImportBcContainerHelper
             $authContext = New-BcAuthContext -includeDeviceLogin -deviceLoginTimeout ([TimeSpan]::FromSeconds(0))
