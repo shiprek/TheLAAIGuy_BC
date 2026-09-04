@@ -83,6 +83,16 @@ table 50100 "LAAI Lead"
             Editable = false;
             DataClassification = CustomerContent;
         }
+        field(14; "Notes"; Text[2048])
+        {
+            Caption = 'Notes';
+            DataClassification = CustomerContent;
+        }
+        field(15; "Contacted Date"; Date)
+        {
+            Caption = 'Contacted Date';
+            DataClassification = CustomerContent;
+        }
     }
 
     keys
