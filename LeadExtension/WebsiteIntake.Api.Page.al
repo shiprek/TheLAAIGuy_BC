@@ -12,6 +12,8 @@ page 50105 "LAAI Website Intake API"
     ODataKeyFields = SystemId;
     DelayedInsert = true;
     Extensible = false;
+    ModifyAllowed = false;
+    DeleteAllowed = false;
 
     layout
     {
@@ -44,11 +46,11 @@ page 50105 "LAAI Website Intake API"
                 field(requestedWindow; Rec."Requested Window") { Caption = 'Requested Window'; }
                 field(preferredContactTime; Rec."Preferred Contact Time") { Caption = 'Preferred Contact Time'; }
                 field(additionalContext; Rec."Additional Context") { Caption = 'Additional Context'; }
-                field(status; Rec.Status) { Caption = 'Status'; }
+                field(status; Rec.Status) { Caption = 'Status'; Editable = false; }
                 field(rawSubmission; Rec."Raw Submission") { Caption = 'Raw Submission'; }
-                field(leadNumber; Rec."Lead No.") { Caption = 'Lead Number'; }
-                field(integrationError; Rec."Integration Error") { Caption = 'Integration Error'; }
-                field(processedAt; Rec."Processed At") { Caption = 'Processed At'; }
+                field(leadNumber; Rec."Lead No.") { Caption = 'Lead Number'; Editable = false; }
+                field(integrationError; Rec."Integration Error") { Caption = 'Integration Error'; Editable = false; }
+                field(processedAt; Rec."Processed At") { Caption = 'Processed At'; Editable = false; }
                 field(sowRequired; Rec."SOW Required") { Caption = 'SOW Required'; }
                 field(flatFeeAvailable; Rec."Flat Fee Available") { Caption = 'Flat Fee Available'; }
                 field(customerNumber; Rec."Customer No.") { Caption = 'Customer Number'; Editable = false; }
@@ -59,4 +61,20 @@ page 50105 "LAAI Website Intake API"
             }
         }
     }
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        Rec.TestField("Submission Id");
+        Rec.TestField("Last Name");
+        Rec.TestField(Email);
+        Rec.Status := Rec.Status::"Review Required";
+        Rec."Lead No." := '';
+        Rec."Customer No." := '';
+        Rec."Sales Quote No." := '';
+        Rec."Sales Order No." := '';
+        Rec."Integration Error" := '';
+        Rec."Processed At" := 0DT;
+        Rec."Last Conversion At" := 0DT;
+        Rec."SOW Required" := true;
+        exit(true);
+    end;
 }
