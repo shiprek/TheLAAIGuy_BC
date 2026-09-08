@@ -20,8 +20,10 @@ The project uses Microsoft AL-Go for GitHub. Application source is in `LeadExten
 2. Confirm the **CI/CD** workflow completes successfully.
 3. Run **Publish To Environment** from GitHub Actions.
 4. Select app version `current` and environment `DEV`.
+5. Validate the change in the DEV sandbox.
+6. Only once validated, promote to TEST: fast-forward the `release` branch to the validated commit on `main` (`git checkout release && git merge --ff-only main && git push`), then run **Publish To Environment** again with environment `TEST`.
 
-Publishing to other environments should happen only after validation in DEV.
+`TEST` only accepts deployments from the `release` branch — this is enforced both in `.github/AL-Go-Settings.json` (`DeployToTEST.Branches`) and as a GitHub Environment deployment branch policy, so nothing can reach TEST without first landing and being validated in DEV. No production environment is configured yet.
 
 ## Website intake import
 
