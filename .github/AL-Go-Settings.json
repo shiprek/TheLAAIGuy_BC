@@ -14,7 +14,7 @@
     "EnvironmentName": "TEST",
     "Scope": "PTE",
     "ContinuousDeployment": false,
-    "Branches": ["main"],
+    "Branches": ["release"],
     "SyncMode": "Add"
   }
 }
