@@ -1,5 +1,20 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.1/.Modules/settings.schema.json",
   "type": "PTE",
-  "templateUrl": "https://github.com/microsoft/AL-Go-PTE@main"
+  "templateUrl": "https://github.com/microsoft/AL-Go-PTE@main",
+  "environments": ["DEV", "TEST"],
+  "DeployToDEV": {
+    "EnvironmentName": "DEV",
+    "Scope": "PTE",
+    "ContinuousDeployment": false,
+    "Branches": ["main"],
+    "SyncMode": "Add"
+  },
+  "DeployToTEST": {
+    "EnvironmentName": "TEST",
+    "Scope": "PTE",
+    "ContinuousDeployment": false,
+    "Branches": ["main"],
+    "SyncMode": "Add"
+  }
 }

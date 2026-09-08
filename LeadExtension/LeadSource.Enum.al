@@ -26,4 +26,8 @@ enum 50101 "LAAI Lead Source"
     {
         Caption = 'Other';
     }
+    value(6; "Walk-up")
+    {
+        Caption = 'Walk-up';
+    }
 }

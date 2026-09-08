@@ -74,6 +74,11 @@ page 50100 "LAAI Lead Card"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the date the lead was created.';
                 }
+                field("Contacted Date"; Rec."Contacted Date")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the date the lead was last contacted.';
+                }
                 field("Customer No."; Rec."Customer No.")
                 {
                     ApplicationArea = All;
@@ -83,6 +88,18 @@ page 50100 "LAAI Lead Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the contact created for this lead, if any.';
+                }
+            }
+            group(NotesGroup)
+            {
+                Caption = 'Notes';
+
+                field(Notes; Rec.Notes)
+                {
+                    ApplicationArea = All;
+                    ShowCaption = false;
+                    MultiLine = true;
+                    ToolTip = 'Specifies free-form notes about this lead.';
                 }
             }
         }
@@ -105,6 +122,22 @@ page 50100 "LAAI Lead Card"
                     LeadToCustomerMgt: Codeunit "LAAI Lead-to-Customer Mgt";
                 begin
                     LeadToCustomerMgt.ConvertToCustomer(Rec);
+                    CurrPage.Update(false);
+                end;
+            }
+            action(CreateContact)
+            {
+                ApplicationArea = All;
+                Caption = 'Create Contact';
+                Image = ContactPerson;
+                Enabled = Rec."Contact No." = '';
+                ToolTip = 'Create a contact from this lead''s details, before any sale happens.';
+
+                trigger OnAction()
+                var
+                    LeadToCustomerMgt: Codeunit "LAAI Lead-to-Customer Mgt";
+                begin
+                    LeadToCustomerMgt.CreateContact(Rec);
                     CurrPage.Update(false);
                 end;
             }
@@ -146,6 +179,9 @@ page 50100 "LAAI Lead Card"
             group(Category_Process)
             {
                 actionref(ConvertToCustomer_Promoted; ConvertToCustomer)
+                {
+                }
+                actionref(CreateContact_Promoted; CreateContact)
                 {
                 }
                 actionref(ViewCustomer_Promoted; ViewCustomer)
