@@ -196,6 +196,12 @@ table 50101 "LAAI Website Intake"
             Caption = 'Last Conversion At';
             DataClassification = SystemMetadata;
         }
+        field(36; "Contact No."; Code[20])
+        {
+            Caption = 'Contact No.';
+            TableRelation = Contact;
+            DataClassification = CustomerContent;
+        }
     }
 
     keys

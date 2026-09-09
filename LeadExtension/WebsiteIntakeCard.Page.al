@@ -49,6 +49,7 @@ page 50103 "LAAI Website Intake Card"
                 field("SOW Required"; Rec."SOW Required") { ApplicationArea = All; }
                 field("Flat Fee Available"; Rec."Flat Fee Available") { ApplicationArea = All; }
                 field("Lead No."; Rec."Lead No.") { ApplicationArea = All; }
+                field("Contact No."; Rec."Contact No.") { ApplicationArea = All; Editable = false; }
                 field("Customer No."; Rec."Customer No.") { ApplicationArea = All; Editable = false; }
                 field("Sales Quote No."; Rec."Sales Quote No.") { ApplicationArea = All; Editable = false; }
                 field("Sales Order No."; Rec."Sales Order No.") { ApplicationArea = All; Editable = false; }

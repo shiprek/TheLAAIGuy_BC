@@ -3,6 +3,7 @@ codeunit 50104 "LAAI Website Intake Mgt"
     procedure CreateLead(var Intake: Record "LAAI Website Intake")
     var
         Lead: Record "LAAI Lead";
+        LeadToCustomerMgt: Codeunit "LAAI Lead-to-Customer Mgt";
         IsHandled: Boolean;
     begin
         if Intake."Existing Client" then
@@ -23,7 +24,10 @@ codeunit 50104 "LAAI Website Intake Mgt"
             Lead.Insert(true);
         end;
 
+        LeadToCustomerMgt.CreateContact(Lead);
+
         Intake."Lead No." := Lead."No.";
+        Intake."Contact No." := Lead."Contact No.";
         Intake.Status := Intake.Status::Qualified;
         Intake."Last Conversion At" := CurrentDateTime();
         Intake.Modify(true);
