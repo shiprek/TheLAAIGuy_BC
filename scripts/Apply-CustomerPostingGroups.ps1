@@ -12,7 +12,18 @@ Install-Module BcContainerHelper -Force -AllowClobber -Scope CurrentUser -Minimu
 Import-Module BcContainerHelper -DisableNameChecking
 
 Write-Host "Authenticating for tenant $Tenant..."
-$authContextParams = $AuthContext | ConvertFrom-Json | ConvertTo-HashTable
+$authContextJson = $AuthContext
+try {
+    $decoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($AuthContext))
+    if ($decoded.TrimStart().StartsWith('{')) {
+        $authContextJson = $decoded
+        Write-Host "AuthContext secret was base64-encoded; decoded before parsing."
+    }
+} catch {
+    # Not base64 - use the raw value as-is.
+}
+$authContextParams = $authContextJson | ConvertFrom-Json | ConvertTo-HashTable
+Write-Host "AuthContext params present: $($authContextParams.Keys -join ', ')"
 $authContextObj = New-BcAuthContext @authContextParams
 if ($null -eq $authContextObj) {
     throw "Authentication failed."
