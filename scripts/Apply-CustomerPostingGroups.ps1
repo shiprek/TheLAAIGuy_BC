@@ -11,10 +11,13 @@ Write-Host "Installing BcContainerHelper..."
 Install-Module BcContainerHelper -Force -AllowClobber -Scope CurrentUser -MinimumVersion 6.0 | Out-Null
 Import-Module BcContainerHelper -DisableNameChecking
 
-Write-Host "Renewing auth context for tenant $Tenant..."
-$authContextObj = $AuthContext | ConvertFrom-Json | ConvertTo-HashTable
-$authContextObj = Renew-BcAuthContext -bcAuthContext $authContextObj
-$bearerToken = $authContextObj.accessToken
+Write-Host "Authenticating for tenant $Tenant..."
+$authContextParams = $AuthContext | ConvertFrom-Json | ConvertTo-HashTable
+$authContextObj = New-BcAuthContext @authContextParams
+if ($null -eq $authContextObj) {
+    throw "Authentication failed."
+}
+$bearerToken = $authContextObj.AccessToken
 
 $headers = @{ Authorization = "Bearer $bearerToken" }
 $baseUrl = "https://api.businesscentral.dynamics.com/v2.0/$Tenant/$EnvironmentName/api/v2.0"
