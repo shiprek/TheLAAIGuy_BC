@@ -1,0 +1,23 @@
+{
+  "description": "Desired-state Customer Posting Groups. Applied via .github/workflows/ApplyBCConfig.yaml through the LAAI Customer Posting Grp API (page 50107). This is the complete list: any Customer Posting Group that exists in the target environment but is NOT listed here gets deleted when applied. Edit this file, push to main, then run the ApplyBCConfig workflow against the target environment - no manual BC UI steps.",
+  "customerPostingGroups": [
+    {
+      "code": "DOMESTIC",
+      "description": "Domestic customers",
+      "receivablesAccount": "1030",
+      "serviceChargeAcc": "",
+      "paymentDiscDebitAcc": "",
+      "paymentDiscCreditAcc": "",
+      "interestAccount": "",
+      "additionalFeeAccount": "",
+      "addFeePerLineAccount": "",
+      "invoiceRoundingAccount": "",
+      "debitRoundingAccount": "",
+      "creditRoundingAccount": "",
+      "debitApplnRndgAcc": "",
+      "creditApplnRndgAcc": "",
+      "paymentToleranceDebitAcc": "",
+      "paymentToleranceCreditAcc": ""
+    }
+  ]
+}

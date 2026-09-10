@@ -1,0 +1,31 @@
+name: Apply BC Config
+
+on:
+  workflow_dispatch:
+    inputs:
+      environmentName:
+        description: Business Central environment to apply config to (DEV, TEST)
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  ApplyCustomerPostingGroups:
+    runs-on: windows-latest
+    environment: ${{ github.event.inputs.environmentName }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Apply Customer Posting Groups
+        shell: powershell
+        env:
+          AUTHCONTEXT: ${{ secrets.AUTHCONTEXT }}
+          BC_TENANT_ID: ${{ vars.BC_TENANT_ID }}
+        run: |
+          ./scripts/Apply-CustomerPostingGroups.ps1 `
+            -Tenant $env:BC_TENANT_ID `
+            -EnvironmentName '${{ github.event.inputs.environmentName }}' `
+            -AuthContext $env:AUTHCONTEXT `
+            -ConfigFile './config/customer-posting-groups.json'
