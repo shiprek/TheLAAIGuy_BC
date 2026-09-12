@@ -2,7 +2,8 @@ param(
     [Parameter(Mandatory = $true)][string] $Tenant,
     [Parameter(Mandatory = $true)][string] $ClientId,
     [Parameter(Mandatory = $true)][string] $EnvironmentName,
-    [Parameter(Mandatory = $true)][string] $ConfigFile
+    [Parameter(Mandatory = $true)][string] $ConfigFile,
+    [string] $CompanyName = 'My Company'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -52,12 +53,16 @@ $headers = @{ Authorization = "Bearer $bearerToken" }
 $baseUrl = "https://api.businesscentral.dynamics.com/v2.0/$Tenant/$EnvironmentName/api/v2.0"
 $apiUrl = "https://api.businesscentral.dynamics.com/v2.0/$Tenant/$EnvironmentName/api/laai/config/v1.0"
 
-Write-Host "Looking up company in $EnvironmentName..."
+Write-Host "Looking up company '$CompanyName' in $EnvironmentName..."
 $companies = Invoke-BcRestMethod -Method Get -Uri "$baseUrl/companies" -Headers $headers
 if ($companies.value.Count -eq 0) {
     throw "No companies found in environment '$EnvironmentName'."
 }
-$company = $companies.value[0]
+Write-Host "Companies found: $($companies.value.name -join ', ')"
+$company = $companies.value | Where-Object { $_.name -eq $CompanyName }
+if ($null -eq $company) {
+    throw "Company '$CompanyName' not found in environment '$EnvironmentName'. Available: $($companies.value.name -join ', ')"
+}
 Write-Host "Using company '$($company.name)' ($($company.id))"
 
 if ($env:PROBE_STANDARD_API -eq 'true') {
