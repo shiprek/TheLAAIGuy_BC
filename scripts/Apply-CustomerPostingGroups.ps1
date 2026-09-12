@@ -62,6 +62,15 @@ Write-Host "Using company '$($company.name)' ($($company.id))"
 
 $resourceUrl = "$apiUrl/companies($($company.id))/customerPostingGroups"
 
+Write-Host "DIAGNOSTIC: probing the existing, known-working Website Intake API (wraps our own table)..."
+try {
+    $probeUrl = "https://api.businesscentral.dynamics.com/v2.0/$Tenant/$EnvironmentName/api/laai/intake/v1.0/companies($($company.id))/websiteIntakes"
+    $probeResult = Invoke-BcRestMethod -Method Get -Uri $probeUrl -Headers $headers
+    Write-Host "DIAGNOSTIC: Website Intake API succeeded ($($probeResult.value.Count) records) - custom APIs over OUR OWN tables work fine with app auth."
+} catch {
+    Write-Host "DIAGNOSTIC: Website Intake API ALSO failed - this is not specific to Base Application tables."
+}
+
 Write-Host "Reading desired state from $ConfigFile..."
 $desired = (Get-Content $ConfigFile -Raw | ConvertFrom-Json).customerPostingGroups
 
