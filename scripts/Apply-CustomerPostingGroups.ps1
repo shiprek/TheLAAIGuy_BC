@@ -1,7 +1,7 @@
 param(
     [Parameter(Mandatory = $true)][string] $Tenant,
+    [Parameter(Mandatory = $true)][string] $ClientId,
     [Parameter(Mandatory = $true)][string] $EnvironmentName,
-    [Parameter(Mandatory = $true)][string] $AuthContext,
     [Parameter(Mandatory = $true)][string] $ConfigFile
 )
 
@@ -11,20 +11,16 @@ Write-Host "Installing BcContainerHelper..."
 Install-Module BcContainerHelper -Force -AllowClobber -Scope CurrentUser -MinimumVersion 6.0 | Out-Null
 Import-Module BcContainerHelper -DisableNameChecking
 
-Write-Host "Authenticating for tenant $Tenant..."
-$authContextJson = $AuthContext
-try {
-    $decoded = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($AuthContext))
-    if ($decoded.TrimStart().StartsWith('{')) {
-        $authContextJson = $decoded
-        Write-Host "AuthContext secret was base64-encoded; decoded before parsing."
-    }
-} catch {
-    # Not base64 - use the raw value as-is.
+Write-Host "Requesting a GitHub OIDC token for federated auth..."
+if (-not $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN -or -not $env:ACTIONS_ID_TOKEN_REQUEST_URL) {
+    throw "No GitHub OIDC token request available - the workflow needs 'permissions: id-token: write'."
 }
-$authContextParams = $authContextJson | ConvertFrom-Json | ConvertTo-HashTable
-Write-Host "AuthContext params present: $($authContextParams.Keys -join ', ')"
-$authContextObj = New-BcAuthContext @authContextParams
+$idToken = Invoke-RestMethod -Method Get -UseBasicParsing `
+    -Headers @{ Authorization = "bearer $env:ACTIONS_ID_TOKEN_REQUEST_TOKEN"; Accept = "application/vnd.github+json" } `
+    -Uri "$($env:ACTIONS_ID_TOKEN_REQUEST_URL)&audience=api://AzureADTokenExchange"
+
+Write-Host "Exchanging federated token for a Business Central access token..."
+$authContextObj = New-BcAuthContext -clientID $ClientId -tenantID $Tenant -clientAssertion $idToken.value
 if ($null -eq $authContextObj) {
     throw "Authentication failed."
 }

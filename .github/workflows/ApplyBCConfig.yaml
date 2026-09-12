@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  id-token: write
 
 jobs:
   ApplyCustomerPostingGroups:
@@ -21,11 +22,11 @@ jobs:
       - name: Apply Customer Posting Groups
         shell: powershell
         env:
-          AUTHCONTEXT: ${{ secrets.AUTHCONTEXT }}
+          BC_CLIENT_ID: ${{ vars.BC_DEPLOYMENT_CLIENT_ID }}
           BC_TENANT_ID: ${{ vars.BC_TENANT_ID }}
         run: |
           ./scripts/Apply-CustomerPostingGroups.ps1 `
             -Tenant $env:BC_TENANT_ID `
+            -ClientId $env:BC_CLIENT_ID `
             -EnvironmentName '${{ github.event.inputs.environmentName }}' `
-            -AuthContext $env:AUTHCONTEXT `
             -ConfigFile './config/customer-posting-groups.json'
