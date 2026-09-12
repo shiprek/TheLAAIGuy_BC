@@ -60,6 +60,29 @@ if ($companies.value.Count -eq 0) {
 $company = $companies.value[0]
 Write-Host "Using company '$($company.name)' ($($company.id))"
 
+if ($env:PROBE_STANDARD_API -eq 'true') {
+    Write-Host "=== PROBE: standard API v2.0 \$metadata (entity list) ==="
+    try {
+        $meta = Invoke-BcRestMethod -Method Get -Uri "$baseUrl/`$metadata" -Headers $headers
+        $entitySetNames = [regex]::Matches($meta, 'EntitySet Name="([^"]+)"') | ForEach-Object { $_.Groups[1].Value }
+        Write-Host "Entity sets ($($entitySetNames.Count) total):"
+        $entitySetNames | Sort-Object | ForEach-Object { Write-Host "  - $_" }
+    } catch {
+        Write-Host "Metadata probe failed."
+    }
+
+    Write-Host "=== PROBE: standard 'accounts' (Chart of Accounts) entity ==="
+    try {
+        $accts = Invoke-BcRestMethod -Method Get -Uri "$baseUrl/companies($($company.id))/accounts?`$top=3" -Headers $headers
+        Write-Host "accounts SUCCEEDED - sample: $($accts.value | ConvertTo-Json -Depth 3)"
+    } catch {
+        Write-Host "accounts probe failed."
+    }
+
+    Write-Host "=== PROBE complete, exiting ==="
+    exit 0
+}
+
 $resourceUrl = "$apiUrl/companies($($company.id))/customerPostingGroups"
 
 Write-Host "Reading desired state from $ConfigFile..."

@@ -6,6 +6,10 @@ on:
       environmentName:
         description: Business Central environment to apply config to (DEV, TEST)
         required: true
+      probeStandardApi:
+        description: Diagnostic only - probe the standard API v2.0 entity list and 'accounts' entity instead of applying config
+        required: false
+        default: 'false'
 
 permissions:
   contents: read
@@ -24,6 +28,7 @@ jobs:
         env:
           BC_CLIENT_ID: ${{ vars.BC_DEPLOYMENT_CLIENT_ID }}
           BC_TENANT_ID: ${{ vars.BC_TENANT_ID }}
+          PROBE_STANDARD_API: ${{ github.event.inputs.probeStandardApi }}
         run: |
           ./scripts/Apply-CustomerPostingGroups.ps1 `
             -Tenant $env:BC_TENANT_ID `
