@@ -26,12 +26,34 @@ if ($null -eq $authContextObj) {
 }
 $bearerToken = $authContextObj.AccessToken
 
+function Invoke-BcRestMethod {
+    param($Method, $Uri, $Headers, $Body, $ContentType)
+    try {
+        $params = @{ Method = $Method; Uri = $Uri; Headers = $Headers }
+        if ($Body) { $params.Body = $Body }
+        if ($ContentType) { $params.ContentType = $ContentType }
+        Invoke-RestMethod @params
+    } catch {
+        $respBody = $null
+        if ($_.Exception.Response) {
+            try {
+                $stream = $_.Exception.Response.GetResponseStream()
+                $reader = New-Object System.IO.StreamReader($stream)
+                $respBody = $reader.ReadToEnd()
+            } catch {}
+        }
+        Write-Host "Request failed: $Method $Uri"
+        if ($respBody) { Write-Host "Response body: $respBody" }
+        throw
+    }
+}
+
 $headers = @{ Authorization = "Bearer $bearerToken" }
 $baseUrl = "https://api.businesscentral.dynamics.com/v2.0/$Tenant/$EnvironmentName/api/v2.0"
 $apiUrl = "https://api.businesscentral.dynamics.com/v2.0/$Tenant/$EnvironmentName/api/laai/config/v1.0"
 
 Write-Host "Looking up company in $EnvironmentName..."
-$companies = Invoke-RestMethod -Method Get -Uri "$baseUrl/companies" -Headers $headers
+$companies = Invoke-BcRestMethod -Method Get -Uri "$baseUrl/companies" -Headers $headers
 if ($companies.value.Count -eq 0) {
     throw "No companies found in environment '$EnvironmentName'."
 }
@@ -44,7 +66,7 @@ Write-Host "Reading desired state from $ConfigFile..."
 $desired = (Get-Content $ConfigFile -Raw | ConvertFrom-Json).customerPostingGroups
 
 Write-Host "Reading current state from $EnvironmentName..."
-$current = (Invoke-RestMethod -Method Get -Uri $resourceUrl -Headers $headers).value
+$current = (Invoke-BcRestMethod -Method Get -Uri $resourceUrl -Headers $headers).value
 
 $fieldNames = @(
     'description', 'receivablesAccount', 'serviceChargeAcc', 'paymentDiscDebitAcc',
@@ -67,14 +89,14 @@ foreach ($item in $desired) {
             Write-Host "Updating $($item.code)..."
             $patchHeaders = $headers.Clone()
             $patchHeaders['If-Match'] = '*'
-            Invoke-RestMethod -Method Patch -Uri "$resourceUrl(code='$($item.code)')" -Headers $patchHeaders -Body ($body | ConvertTo-Json) -ContentType 'application/json' | Out-Null
+            Invoke-BcRestMethod -Method Patch -Uri "$resourceUrl(code='$($item.code)')" -Headers $patchHeaders -Body ($body | ConvertTo-Json) -ContentType 'application/json' | Out-Null
         } else {
             Write-Host "$($item.code) already matches desired state."
         }
     } else {
         Write-Host "Creating $($item.code)..."
         $body['code'] = $item.code
-        Invoke-RestMethod -Method Post -Uri $resourceUrl -Headers $headers -Body ($body | ConvertTo-Json) -ContentType 'application/json' | Out-Null
+        Invoke-BcRestMethod -Method Post -Uri $resourceUrl -Headers $headers -Body ($body | ConvertTo-Json) -ContentType 'application/json' | Out-Null
     }
 }
 
@@ -84,7 +106,7 @@ foreach ($existingItem in $current) {
         Write-Host "Deleting $($existingItem.code) (not in desired state)..."
         $deleteHeaders = $headers.Clone()
         $deleteHeaders['If-Match'] = '*'
-        Invoke-RestMethod -Method Delete -Uri "$resourceUrl(code='$($existingItem.code)')" -Headers $deleteHeaders | Out-Null
+        Invoke-BcRestMethod -Method Delete -Uri "$resourceUrl(code='$($existingItem.code)')" -Headers $deleteHeaders | Out-Null
     }
 }
 
