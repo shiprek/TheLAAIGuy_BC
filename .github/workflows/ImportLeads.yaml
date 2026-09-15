@@ -33,4 +33,11 @@ jobs:
             -Tenant $env:BC_TENANT_ID `
             -ClientId $env:BC_CLIENT_ID `
             -EnvironmentName '${{ github.event.inputs.environmentName }}' `
-            -LeadsFile '${{ github.event.inputs.leadsFile }}'
+            -LeadsFile '${{ github.event.inputs.leadsFile }}' `
+            -ResultsFile './import-results.json'
+
+      - name: Upload import results
+        uses: actions/upload-artifact@v4
+        with:
+          name: import-results
+          path: import-results.json

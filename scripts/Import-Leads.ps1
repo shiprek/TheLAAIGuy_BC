@@ -3,7 +3,8 @@ param(
     [Parameter(Mandatory = $true)][string] $ClientId,
     [Parameter(Mandatory = $true)][string] $EnvironmentName,
     [Parameter(Mandatory = $true)][string] $LeadsFile,
-    [string] $CompanyName = 'My Company'
+    [string] $CompanyName = 'My Company',
+    [string] $ResultsFile = './import-results.json'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -69,15 +70,19 @@ $desired = $batch.leads
 Write-Host "Batch '$($batch.batch)': $($desired.Count) leads."
 
 Write-Host "Reading existing leads from $EnvironmentName (to avoid duplicates by Company Name)..."
-$existing = (Invoke-BcRestMethod -Method Get -Uri "$resourceUrl`?`$select=companyName" -Headers $headers).value
-$existingCompanyNames = @($existing | ForEach-Object { $_.companyName.Trim().ToLowerInvariant() })
+$existing = (Invoke-BcRestMethod -Method Get -Uri "$resourceUrl`?`$select=companyName,no" -Headers $headers).value
+$existingByCompanyName = @{}
+foreach ($e in $existing) { $existingByCompanyName[$e.companyName.Trim().ToLowerInvariant()] = $e.no }
 
 $created = 0
 $skipped = 0
+$results = @()
 foreach ($lead in $desired) {
     $key = $lead.companyName.Trim().ToLowerInvariant()
-    if ($existingCompanyNames -contains $key) {
-        Write-Host "Skipping '$($lead.companyName)' - a lead with this Company Name already exists."
+    if ($existingByCompanyName.ContainsKey($key)) {
+        $existingNo = $existingByCompanyName[$key]
+        Write-Host "Skipping '$($lead.companyName)' - a lead with this Company Name already exists ($existingNo)."
+        $results += [ordered]@{ companyName = $lead.companyName; no = $existingNo; action = 'skipped' }
         $skipped++
         continue
     }
@@ -92,9 +97,14 @@ foreach ($lead in $desired) {
         notes       = $lead.notes
     }
     Write-Host "Creating lead for '$($lead.companyName)'..."
-    Invoke-BcRestMethod -Method Post -Uri $resourceUrl -Headers $headers -Body ($body | ConvertTo-Json) -ContentType 'application/json' | Out-Null
-    $existingCompanyNames += $key
+    $createdLead = Invoke-BcRestMethod -Method Post -Uri $resourceUrl -Headers $headers -Body ($body | ConvertTo-Json) -ContentType 'application/json'
+    Write-Host "  -> $($createdLead.no)"
+    $results += [ordered]@{ companyName = $lead.companyName; no = $createdLead.no; action = 'created' }
+    $existingByCompanyName[$key] = $createdLead.no
     $created++
 }
+
+Write-Host "Writing results for $($results.Count) lead(s) to $ResultsFile..."
+[ordered]@{ batch = $batch.batch; environmentName = $EnvironmentName; results = $results } | ConvertTo-Json -Depth 5 | Set-Content -Path $ResultsFile -Encoding utf8
 
 Write-Host "Done. Created $created lead(s), skipped $skipped already-existing lead(s) from $LeadsFile."
