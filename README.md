@@ -30,3 +30,16 @@ The project uses Microsoft AL-Go for GitHub. Application source is in `LeadExten
 Export the `Website Intakes` worksheet from Google Sheets as CSV. In Business Central, open **Website Intakes** and choose **Import Website Intakes**. Duplicate rows are ignored using the website intake ID.
 
 All customer, lead, quote, and order creation remains a reviewed Business Central action. Existing customers are linked directly and do not create a lead.
+
+## Lead list import
+
+Externally researched lead lists (e.g. a prospect list built by an AI helper) import touchlessly via GitHub Actions - no Business Central UI steps required. Full procedure, data contract, and troubleshooting: [Lead list import](https://github.com/shiprek/TheLAAIGuy/blob/main/docs/lead-list-import.md) in the Integration Playbooks repository.
+
+Quick reference:
+
+1. Convert the list to `data/leads/<batch-id>.json` (see `data/leads/2026-09-14-la-small-business.json` for the format) and commit it.
+2. `gh workflow run ImportLeads.yaml --ref <main|release> -f environmentName=<DEV|TEST> -f leadsFile=data/leads/<batch-id>.json`
+3. Re-running the same batch file is safe - it's create-only and skips any Company Name already present, never updates or deletes.
+4. `gh run download <run-id> -n import-results` retrieves each row's BC-assigned `No.` (for building a spreadsheet back for the setup user).
+
+The `LAAI Lead API` (page 50108) reuses the same app-only auth pattern (federated OIDC, `API.ReadWrite.All`, per-environment `LAAI LEADS` permission set, company selected by name not index) documented for `LAAI Customer Posting Grp API` in the Integration Playbooks repo's GitHub-to-Business-Central playbook.
