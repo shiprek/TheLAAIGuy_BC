@@ -17,6 +17,7 @@ permissionset 50100 "LAAI LEADS"
         page "LAAI Website Intake List" = X,
         page "LAAI Website Intake API" = X,
         page "LAAI Customer Posting Grp API" = X,
+        page "LAAI Lead API" = X,
         page "LAAI Intake Event ListPart" = X,
         codeunit "LAAI Lead-to-Customer Mgt" = X,
         codeunit "LAAI Website Intake Mgt" = X,

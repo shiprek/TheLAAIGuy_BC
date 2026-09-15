@@ -1,0 +1,185 @@
+﻿{
+    "batch":  "2026-09-14-la-small-business",
+    "leads":  [
+                  {
+                      "name":  "Dr. Paymon Banafshe (or Practice Manager)",
+                      "companyName":  "Manchester Medical Group",
+                      "email":  "hello@manchester-medical.com",
+                      "phoneNo":  "310-670-1840",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Healthcare / independent medical clinic (maps to Altamed, InfuSystem projects). Address: 6222 W. Manchester Ave, Suite A, Los Angeles, CA 90045. Website: manchester-medical.com. Small primary/urgent care practice with in-house dietitian services - likely juggling scheduling, patient records, and billing across systems. Good fit for a CRM/patient-workflow implementation pitch."
+                  },
+                  {
+                      "name":  "Practice/Office Manager",
+                      "companyName":  "Brentview Medical Urgent Care",
+                      "email":  "",
+                      "phoneNo":  "310-820-0013",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Healthcare / independent urgent care (maps to Altamed, InfuSystem projects). Address: 11611 San Vicente Blvd, Los Angeles, CA 90049 (2nd location: 8264 Santa Monica Blvd, West Hollywood, CA 90046, 323-522-2222). Website: brentviewmedical.com. Two-location walk-in practice - likely needs unified patient/lead intake across sites."
+                  },
+                  {
+                      "name":  "Dr. Alfred Lavi, Founder \u0026 Medical Director",
+                      "companyName":  "United Care Family Medical Center",
+                      "email":  "",
+                      "phoneNo":  "213-383-3600",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Healthcare / independent family medicine \u0026 OB-GYN clinic (maps to Altamed). Address: 2324 W. Pico Blvd, Los Angeles, CA 90006 (2nd location: 1835 S La Cienega Blvd #215, Los Angeles, CA 90035). Website: unitedcaremedical.com. Owner-operator practice founded 2004, two locations, multiple specialties - strong candidate for consolidating patient/referral tracking."
+                  },
+                  {
+                      "name":  "Office Manager",
+                      "companyName":  "Vermont Urgent Care \u0026 Multi Specialty Center",
+                      "email":  "",
+                      "phoneNo":  "213-386-2511",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Healthcare / independent urgent care (maps to Altamed). Address: 1435 S. Vermont Ave #100, Los Angeles, CA 90006. Website: vermonturgentcare.org. Long-running walk-in clinic serving a high patient volume - likely still on manual/legacy scheduling."
+                  },
+                  {
+                      "name":  "Travel Advisor Team Lead",
+                      "companyName":  "TravelStore",
+                      "email":  "",
+                      "phoneNo":  "310-575-5540",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Travel \u0026 tourism / leisure \u0026 corporate travel agency (maps to TUI Student Travel, NHTT projects). Address: 11538 San Vicente Blvd, Los Angeles, CA 90049 (Brentwood HQ). Website: travelstore.com. Independent agency with in-house corporate + leisure advisors - itinerary/quote workflow is a close match to your NHTT/TUI work."
+                  },
+                  {
+                      "name":  "Owner/Manager",
+                      "companyName":  "Must Go Travel",
+                      "email":  "travel@mustgotravel.com",
+                      "phoneNo":  "818-208-2000",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Travel \u0026 tourism / boutique travel agency (maps to TUI Student Travel, NHTT projects). Address: 1111 N Brand Blvd, Glendale, CA. Website: mustgotravel.com. Founded 2015, boutique packaged-travel agency - likely handling quotes/bookings without a real CRM yet."
+                  },
+                  {
+                      "name":  "Sales Manager",
+                      "companyName":  "Bobco Metals LLC",
+                      "email":  "sales@bobcometal.com",
+                      "phoneNo":  "213-748-5824",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Manufacturing / metal distribution (maps to Reliance Steel \u0026 Aluminum, Visual Workplace projects). Address: 2000 S. Alameda St, Los Angeles, CA 90058. Website: bobcometal.com. 50+ year family-founded (by Bob Blaugrund) wholesale/retail metal distributor - order/quote-to-cash workflow closely mirrors the Visual Workplace CRM-to-Great Plains project."
+                  },
+                  {
+                      "name":  "Sales Manager",
+                      "companyName":  "M\u0026K Metal Co.",
+                      "email":  "",
+                      "phoneNo":  "310-327-9011",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Manufacturing / metal distribution (maps to Reliance Steel \u0026 Aluminum, Visual Workplace projects). South Bay Los Angeles area. Website: mkmetal.net. Self-described as one of the largest commercial metal distributors in the South Bay - independent, 40+ years in business."
+                  },
+                  {
+                      "name":  "Sales Team (Letty, Mario, or Sandy)",
+                      "companyName":  "Ace Metal Supply, Inc.",
+                      "email":  "ace.metals@verizon.net",
+                      "phoneNo":  "909-902-9366",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Manufacturing / metal distribution \u0026 custom fabrication (maps to Reliance Steel \u0026 Aluminum, Visual Workplace). Address: 13885 Magnolia Ave, Chino, CA 91710. Website: acemetalsupplyandfabrication.com. Independent steel distributor/fabricator since 1997 serving LA/Orange/Riverside/San Bernardino counties."
+                  },
+                  {
+                      "name":  "Ara Oghoorian, Founder \u0026 President",
+                      "companyName":  "ACap Advisors \u0026 Accountants",
+                      "email":  "",
+                      "phoneNo":  "",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Finance / boutique fee-only wealth management \u0026 accounting (maps to Sigma Investments project; NOT a bank). Los Angeles, CA. Website: acapam.com. Small fee-only fiduciary RIA + accounting firm - the quarterly reporting/portfolio-tracking need is very close to the Sigma Investments CRM build."
+                  },
+                  {
+                      "name":  "Jim Berliner, Co-Founder",
+                      "companyName":  "Westmount Partners, LLC",
+                      "email":  "info@westmount.com",
+                      "phoneNo":  "310-556-2502",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Finance / independent investment \u0026 wealth advisory (maps to Sigma Investments project; NOT a bank). Address: 2049 Century Park East, Suite 2500, Los Angeles, CA 90067. Website: westmount.com. Independent LA investment firm since 1990 serving individuals, families, and nonprofits."
+                  },
+                  {
+                      "name":  "Managing Partner",
+                      "companyName":  "Main Street Advisors",
+                      "email":  "",
+                      "phoneNo":  "",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Finance / independent investment advisory, media \u0026 entertainment focus (maps to Sigma Investments; NOT a bank). Downtown Los Angeles, CA. Website: mainstreetadvisors.com. Boutique RIA (~28 employees per industry data) founded 1997. Named contact not publicly listed - verify via LinkedIn before outreach."
+                  },
+                  {
+                      "name":  "Executive Director",
+                      "companyName":  "Pfaffinger Foundation",
+                      "email":  "",
+                      "phoneNo":  "213-680-7460",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Nonprofit / private grantmaking foundation (maps to Fetzer Institute, Great Lakes Cap Fund projects). Address: 420 E. Third St, Suite 1010, Los Angeles, CA 90013. Website: pfoundation.org. Small foundation (~7 staff, ~$7.7M revenue) making grants to newspaper employees/retirees - grantee/vendor payment tracking mirrors the Fetzer Institute build."
+                  },
+                  {
+                      "name":  "Executive Director",
+                      "companyName":  "The Don and Lorraine Freeberg Foundation",
+                      "email":  "",
+                      "phoneNo":  "",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Nonprofit / private grantmaking foundation (maps to Fetzer Institute, Great Lakes Cap Fund projects). Glendale, CA. ~$7.7M revenue, funds health organizations (~46 grants/year). Named contact and direct phone not publicly listed - verify via GuideStar/Foundation Directory before outreach."
+                  },
+                  {
+                      "name":  "Dan O\u0027Brien, President \u0026 CEO",
+                      "companyName":  "Culver City Chamber of Commerce",
+                      "email":  "info@culvercitychamber.com",
+                      "phoneNo":  "310-287-3852",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Chamber of commerce / business membership org (maps to Genesee Regional Chamber of Commerce, Detroit Metro CVB projects). Address: 6000 Sepulveda Blvd #1260, Culver City, CA 90230. Website: culvercitychamber.com. 500+ member businesses - membership/renewal tracking is a direct match to the Genesee Chamber build."
+                  },
+                  {
+                      "name":  "Jamie Keyser Thomas, CEO",
+                      "companyName":  "Burbank Chamber of Commerce",
+                      "email":  "jkeyser@burbankchamber.org",
+                      "phoneNo":  "818-846-3111",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Chamber of commerce / business membership org (maps to Genesee Regional Chamber of Commerce project). Address: 200 W Magnolia Blvd, Burbank, CA 91502. Website: burbankchamber.org. Small nonprofit staff (CEO + Marketing/Ops Director + Membership Director) - good size fit."
+                  },
+                  {
+                      "name":  "Christine Susa",
+                      "companyName":  "Pasadena Convention \u0026 Visitors Bureau",
+                      "email":  "info@visitpasadena.com",
+                      "phoneNo":  "626-795-9311",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Tourism board / convention \u0026 visitors bureau (maps to Detroit Metro Convention \u0026 Visitors Bureau project). Address: 300 E. Green St, Pasadena, CA 91101. Website: visitpasadena.com. Nonprofit destination marketing org - member/venue and event-lead tracking mirrors the DMCVB engagement."
+                  },
+                  {
+                      "name":  "Marketing/Communications Contact",
+                      "companyName":  "Santa Monica Travel \u0026 Tourism",
+                      "email":  "",
+                      "phoneNo":  "800-544-5319",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Tourism board / destination marketing org (maps to Detroit Metro Convention \u0026 Visitors Bureau project). Address: 2427 Main Street, Santa Monica, CA 90405. Website: santamonica.com. Nonprofit under contract with the City of Santa Monica; runs 3 visitor centers - staff directory at santamonica.com/about/staff/, confirm named contact before outreach."
+                  },
+                  {
+                      "name":  "Owner/Manager",
+                      "companyName":  "Tel-Us Call Center",
+                      "email":  "",
+                      "phoneNo":  "",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Phone-based consumer services / answering service \u0026 call center (maps to California Psychics project). Address: 5757 W Century Blvd #120, Los Angeles, CA 90045. Website: tel-us.com. Boutique US-based live-agent answering service already advertising Salesforce/HubSpot integrations - signals real CRM/AI buying intent, strong first call."
+                  },
+                  {
+                      "name":  "Bill Sermania, Owner",
+                      "companyName":  "Los Angeles Advanced Answering",
+                      "email":  "",
+                      "phoneNo":  "213-596-8824",
+                      "status":  "New",
+                      "source":  "Other",
+                      "notes":  "Industry: Phone-based consumer services / answering service (maps to California Psychics project). Address: 277 S Irving Blvd, Los Angeles, CA 90004. Website: advancedansweringservice.com. Owner-operated, in business 20 years, BBB A+ rated - classic small-business owner likely to be pitchable directly."
+                  }
+              ]
+}
