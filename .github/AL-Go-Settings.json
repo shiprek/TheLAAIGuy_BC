@@ -5,6 +5,8 @@
   "environments": ["DEV", "TEST"],
   "useCompilerFolder": true,
   "doNotPublishApps": true,
+  "enableCodeCop": true,
+  "enableUICop": true,
   "DeployToDEV": {
     "EnvironmentName": "DEV",
     "Scope": "PTE",
