@@ -1,0 +1,21 @@
+{
+  "id": "117b8cc0-2f5f-52e1-b4cb-b4a79456dfd7",
+  "name": "LAAI Time Entry",
+  "publisher": "LAAI",
+  "version": "1.0.0.0",
+  "platform": "1.0.0.0",
+  "application": "1.0.0.0",
+  "runtime": "13.0",
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "dependencies": [],
+  "idRanges": [
+    {
+      "from": 50150,
+      "to": 50199
+    }
+  ]
+}
