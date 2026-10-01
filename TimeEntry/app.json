@@ -1,0 +1,29 @@
+{
+    "id": "c0cfe499-e1ec-4770-a4ff-d90b10921760",
+    "name": "LAAI Time Entry",
+    "publisher": "LAAI",
+    "version": "1.0.0.0",
+    "brief": "Time entry management for Business Central.",
+    "description": "Adds time entry tracking with customer, billable status, time type (Agent/Human), active minutes, date, description, and chat ID.",
+    "privacyStatement": "",
+    "EULA": "",
+    "help": "",
+    "url": "",
+    "logo": "",
+    "dependencies": [],
+    "screenshots": [],
+    "platform": "1.0.0.0",
+    "application": "1.0.0.0",
+    "idRanges": [
+        {
+            "from": 50150,
+            "to": 50199
+        }
+    ],
+    "resourceExposurePolicy": {
+        "allowDebugging": true,
+        "allowDownloadingSource": true,
+        "includeSourceInSymbolFile": true
+    },
+    "runtime": "13.0"
+}
