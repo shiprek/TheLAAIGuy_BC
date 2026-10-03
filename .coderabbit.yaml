@@ -1,0 +1,30 @@
+# CodeRabbit review settings (trial, 2026-10-03).
+# CodeRabbit reviews every PR here, including the BC agent's own PRs (laai-agent[bot]).
+# Its review gates the agent's auto-merge to DEV through the main ruleset:
+# the "CodeRabbit" commit status must pass and every review thread must be resolved.
+# This repo is public and holds no client data. Don't copy this setup to a client's
+# repo without checking that client's privacy tier (AGENT-012).
+language: en-US
+reviews:
+  profile: chill
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  commit_status: true
+  fail_commit_status: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_filters:
+    - "!.AL-Go/**"
+    - "!.github/**"
+  path_instructions:
+    - path: "**/*.al"
+      instructions: >-
+        This AL is written by a local AI agent and merged to a Business Central DEV
+        sandbox on a green build. Review it against Microsoft's AL coding guidelines.
+        Focus on bugs, data loss, permissions, API page behaviour and changes to
+        existing tables that can't be undone (removed, renamed or retyped fields,
+        key changes, ObsoleteState, upgrade or install code). CodeCop and UICop
+        already score style in the build, so don't repeat their warnings
+        (tooltips, file names) as findings.
