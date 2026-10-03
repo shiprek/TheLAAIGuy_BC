@@ -43,3 +43,7 @@ Quick reference:
 4. `gh run download <run-id> -n import-results` retrieves each row's BC-assigned `No.` (for building a spreadsheet back for the setup user).
 
 The `LAAI Lead API` (page 50108) reuses the same app-only auth pattern (federated OIDC, `API.ReadWrite.All`, per-environment `LAAI LEADS` permission set, company selected by name not index) documented for `LAAI Customer Posting Grp API` in the Integration Playbooks repo's GitHub-to-Business-Central playbook.
+
+## Code review
+
+A structure and standards review from 3 October 2026 is in [docs/code-review.md](docs/code-review.md). It records findings only. It does not change how the code runs.
