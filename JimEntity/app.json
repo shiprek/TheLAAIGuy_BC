@@ -1,0 +1,21 @@
+{
+  "id": "71f211db-db3d-5549-acfe-a479f77884e3",
+  "name": "LAAI JimEntity",
+  "publisher": "LAAI",
+  "version": "1.0.0.0",
+  "platform": "1.0.0.0",
+  "application": "1.0.0.0",
+  "runtime": "13.0",
+  "resourceExposurePolicy": {
+    "allowDebugging": true,
+    "allowDownloadingSource": true,
+    "includeSourceInSymbolFile": true
+  },
+  "dependencies": [],
+  "idRanges": [
+    {
+      "from": 50200,
+      "to": 50249
+    }
+  ]
+}
