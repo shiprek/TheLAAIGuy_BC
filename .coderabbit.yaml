@@ -10,6 +10,8 @@ reviews:
   request_changes_workflow: true
   high_level_summary: true
   poem: false
+  # commit_status only posts the "CodeRabbit" status when review_progress is off.
+  review_progress: false
   commit_status: true
   fail_commit_status: true
   auto_review:
@@ -17,7 +19,6 @@ reviews:
     drafts: false
   path_filters:
     - "!.AL-Go/**"
-    - "!.github/**"
   path_instructions:
     - path: "**/*.al"
       instructions: >-
