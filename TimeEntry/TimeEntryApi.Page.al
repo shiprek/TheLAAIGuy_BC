@@ -1,8 +1,8 @@
-page 50151 "LAAI Time Entry API"
+page 50102 "LAAI Time Entry API"
 {
     PageType = API;
     APIPublisher = 'laai';
-    APIGroup = 'timeentry';
+    APIGroup = 'time';
     APIVersion = 'v1.0';
     EntityName = 'timeEntry';
     EntitySetName = 'timeEntries';
@@ -28,6 +28,11 @@ page 50151 "LAAI Time Entry API"
                 field(date; Rec.Date) { }
                 field(description; Rec.Description) { }
                 field(chatId; Rec."Chat ID") { }
+                field(projectNo; Rec."Project No.") { }
+                field(projectTaskNo; Rec."Project Task No.") { }
+                field(workType; Rec."Work Type") { }
+                field(status; Rec.Status) { }
+                field(postedEntryNo; Rec."Posted Entry No.") { }
             }
         }
     }
