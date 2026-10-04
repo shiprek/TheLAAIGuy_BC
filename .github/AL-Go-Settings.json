@@ -5,10 +5,12 @@
   "environments": ["DEV", "TEST"],
   "useCompilerFolder": true,
   "doNotPublishApps": true,
+  "enableCodeCop": true,
+  "enableUICop": true,
   "DeployToDEV": {
     "EnvironmentName": "DEV",
     "Scope": "PTE",
-    "ContinuousDeployment": false,
+    "ContinuousDeployment": true,
     "Branches": ["main"],
     "SyncMode": "Add"
   },
