@@ -1,12 +1,6 @@
-permissionset 50150 "LAAI TimeEntry"
+permissionset 50151 "LAAI TimeEntry Post"
 {
     Assignable = true;
-    Permissions = tabledata "LAAI Time Entry" = RI,
-        table "LAAI Time Entry" = X,
-        page "LAAI Time Entry List" = X,
-        page "LAAI Time Entry API" = X,
-        tabledata Job = R,
-        tabledata "Job Task" = R,
-        tabledata "Work Type" = R,
-        tabledata Resource = R;
+    Permissions = tabledata "LAAI Time Entry" = RM,
+        codeunit "LAAI Post Time Entries" = X;
 }
