@@ -1,6 +1,6 @@
 # The LA AI Guy — Business Central Extension
 
-This repository contains the `LAAI Leads` per-tenant extension for Microsoft Dynamics 365 Business Central.
+This repository contains the `LAAI Leads` and `LAAI Time Entry` per-tenant extensions for Microsoft Dynamics 365 Business Central.
 
 ## Features
 
@@ -14,16 +14,24 @@ This repository contains the `LAAI Leads` per-tenant extension for Microsoft Dyn
 
 ## Build and deployment
 
-The project uses Microsoft AL-Go for GitHub. Application source is in `LeadExtension` and project settings are in `.AL-Go/settings.json`.
+The project uses Microsoft AL-Go for GitHub. Each app has its own folder (`LeadExtension`, `TimeEntry`, and any new app folder). `appFolders` in `.AL-Go/settings.json` is empty, so AL-Go finds every app folder on its own. Deployment settings are in `.github/AL-Go-Settings.json`.
 
-1. Push or merge the desired changes to `main`.
-2. Confirm the **CI/CD** workflow completes successfully.
-3. Run **Publish To Environment** from GitHub Actions.
-4. Select app version `current` and environment `DEV`.
-5. Validate the change in the DEV sandbox.
-6. Only once validated, promote to TEST: fast-forward the `release` branch to the validated commit on `main` (`git checkout release && git merge --ff-only main && git push`), then run **Publish To Environment** again with environment `TEST`.
+### DEV
 
-`TEST` only accepts deployments from the `release` branch — this is enforced both in `.github/AL-Go-Settings.json` (`DeployToTEST.Branches`) and as a GitHub Environment deployment branch policy, so nothing can reach TEST without first landing and being validated in DEV. No production environment is configured yet.
+1. Open a pull request into `main`. CodeRabbit reviews it and the **Pull Request Status Check** build must pass.
+2. Merge it. BC agent pull requests auto-merge once the build is green and CodeRabbit approves.
+3. The **CI/CD** run on `main` builds the apps and deploys them to DEV on its own (`DeployToDEV.ContinuousDeployment`). No manual publish is needed.
+4. Validate the change in the DEV sandbox.
+
+### TEST
+
+TEST only accepts deployments from the `release` branch. This is set in `DeployToTEST.Branches` and in the TEST GitHub Environment's deployment branch policy, so nothing reaches TEST without landing in DEV first. The same validated commit is promoted; nothing is rebuilt from different code.
+
+1. Fast-forward `release` to the validated commit on `main` (`git checkout release && git merge --ff-only main && git push`).
+2. Run the **CI/CD** workflow manually on `release` (a push to `release` does not start it).
+3. Run **Publish To Environment** from the `release` branch with app version `current` and environment `TEST`.
+
+No production environment is configured yet.
 
 ## Website intake import
 
