@@ -7,5 +7,6 @@ permissionset 50150 "LAAI TimeEntry"
         page "LAAI Time Entry API" = X,
         tabledata Job = R,
         tabledata "Job Task" = R,
-        tabledata "Work Type" = R;
+        tabledata "Work Type" = R,
+        tabledata Resource = R;
 }
