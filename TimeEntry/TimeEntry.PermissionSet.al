@@ -4,5 +4,8 @@ permissionset 50150 "LAAI TimeEntry"
     Permissions = tabledata "LAAI Time Entry" = RI,
         table "LAAI Time Entry" = X,
         page "LAAI Time Entry List" = X,
-        page "LAAI Time Entry API" = X;
+        page "LAAI Time Entry API" = X,
+        tabledata Job = R,
+        tabledata "Job Task" = R,
+        tabledata "Work Type" = R;
 }
