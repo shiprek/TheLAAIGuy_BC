@@ -37,4 +37,17 @@ page 50151 "LAAI Time Entry API"
             }
         }
     }
+    [ServiceEnabled]
+    [Scope('Cloud')]
+    procedure Post(var ActionContext: WebServiceActionContext)
+    var
+        LAAIPostTimeEntries: Codeunit "LAAI Post Time Entries";
+    begin
+        LAAIPostTimeEntries.PostTimeEntry(Rec);
+
+        ActionContext.SetObjectType(ObjectType::Page);
+        ActionContext.SetObjectId(Page::"LAAI Time Entry API");
+        ActionContext.AddEntityKey(Rec.FieldNo(SystemId), Rec.SystemId);
+        ActionContext.SetResultCode(WebServiceActionResultCode::Updated);
+    end;
 }
