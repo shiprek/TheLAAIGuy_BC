@@ -37,4 +37,18 @@ page 50151 "LAAI Time Entry API"
             }
         }
     }
+
+    procedure Post(var ActionContext: WebServiceActionContext)
+    var
+        LAAIPostTimeEntries: Codeunit "LAAI Post Time Entries";
+    begin
+        // Call the codeunit to post the time entry
+        LAAIPostTimeEntries.PostTimeEntry(Rec);
+
+        // Set the result context to the API page with the updated record
+        ActionContext.SetObjectType(ObjectType::Page);
+        ActionContext.SetObjectId(Page::"LAAI Time Entry API");
+        ActionContext.AddEntityKey(Rec.FieldNo(SystemId), Rec.SystemId);
+        ActionContext.SetResultCode(WebServiceActionResultCode::Updated);
+    end;
 }
