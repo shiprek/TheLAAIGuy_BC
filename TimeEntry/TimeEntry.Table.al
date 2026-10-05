@@ -29,6 +29,31 @@ table 50150 "LAAI Time Entry"
         field(8; "Chat ID"; Text[50])
         {
         }
+        field(9; "Project No."; Code[20])
+        {
+            TableRelation = Job;
+        
+            trigger OnValidate()
+            begin
+                if Rec."Project No." <> xRec."Project No." then
+                    Rec.Validate("Project Task No.", '');
+            end;
+        }
+        field(10; "Project Task No."; Code[20])
+        {
+            TableRelation = "Job Task"."Job Task No." where("Job No." = field("Project No."));
+        }
+        field(11; "Work Type"; Code[10])
+        {
+            TableRelation = "Work Type";
+        }
+        field(12; Status; Enum "LAAI Time Entry Status")
+        {
+            InitValue = Open;
+        }
+        field(13; "Posted Entry No."; Integer)
+        {
+        }
     }
 
     keys
@@ -42,4 +67,22 @@ table 50150 "LAAI Time Entry"
             Unique = true;
         }
     }
+
+    trigger OnInsert()
+    begin
+        if Rec.Status = Rec.Status::Posted then
+            Error('You cannot add a row that is already Posted.');
+    end;
+
+    trigger OnModify()
+    begin
+        if xRec.Status = xRec.Status::Posted then
+            Error('You cannot change a row that is Posted.');
+    end;
+
+    trigger OnDelete()
+    begin
+        if xRec.Status = xRec.Status::Posted then
+            Error('You cannot delete a row that is Posted.');
+    end;
 }
