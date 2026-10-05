@@ -54,6 +54,10 @@ table 50150 "LAAI Time Entry"
         field(13; "Posted Entry No."; Integer)
         {
         }
+        field(14; "Resource No."; Code[20])
+        {
+            TableRelation = Resource;
+        }
     }
 
     keys

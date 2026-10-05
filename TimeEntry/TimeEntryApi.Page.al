@@ -33,6 +33,7 @@ page 50151 "LAAI Time Entry API"
                 field(workType; Rec."Work Type") { }
                 field(status; Rec.Status) { Editable = false; }
                 field(postedEntryNo; Rec."Posted Entry No.") { Editable = false; }
+                field(resourceNo; Rec."Resource No.") { }
             }
         }
     }
