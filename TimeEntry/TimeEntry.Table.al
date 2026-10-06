@@ -79,9 +79,12 @@ table 50150 "LAAI Time Entry"
     end;
 
     trigger OnModify()
+    var
+        StoredRow: Record "LAAI Time Entry";
     begin
-        if xRec.Status = xRec.Status::Posted then
-            Error('You cannot change a row that is Posted.');
+        if StoredRow.GetBySystemId(Rec.SystemId) then
+            if StoredRow.Status = StoredRow.Status::Posted then
+                Error('You cannot change a row that is Posted.');
     end;
 
     trigger OnDelete()
