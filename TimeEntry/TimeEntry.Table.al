@@ -58,6 +58,14 @@ table 50150 "LAAI Time Entry"
         {
             TableRelation = Resource;
         }
+        field(15; "Time Sheet No."; Integer)
+        {
+            DataClassification = CustomerContent;
+        }
+        field(16; "Time Sheet Line No."; Integer)
+        {
+            DataClassification = CustomerContent;
+        }
     }
 
     keys
