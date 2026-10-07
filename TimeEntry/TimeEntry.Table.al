@@ -58,6 +58,12 @@ table 50150 "LAAI Time Entry"
         {
             TableRelation = Resource;
         }
+        field(15; "Time Sheet No."; Code[20])
+        {
+        }
+        field(16; "Time Sheet Line No."; Integer)
+        {
+        }
     }
 
     keys
