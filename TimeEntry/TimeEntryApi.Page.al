@@ -34,6 +34,8 @@ page 50151 "LAAI Time Entry API"
                 field(status; Rec.Status) { Editable = false; }
                 field(postedEntryNo; Rec."Posted Entry No.") { Editable = false; }
                 field(resourceNo; Rec."Resource No.") { }
+                field(timeSheetNo; Rec."Time Sheet No.") { }
+                field(timeSheetLineNo; Rec."Time Sheet Line No.") { }
             }
         }
     }
