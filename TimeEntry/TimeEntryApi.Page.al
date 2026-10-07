@@ -57,6 +57,10 @@ page 50151 "LAAI Time Entry API"
     var
         LAAITimeSheetEntries: Codeunit "LAAI Time Sheet Entries";
     begin
+        // Validate that the time entry is in Open status before putting it on a time sheet
+        if Rec.Status <> Rec.Status::Open then
+            Error('Time entry must be in Open status to put on time sheet.');
+
         LAAITimeSheetEntries.PutOnTimeSheet(Rec);
         ActionContext.SetObjectType(ObjectType::Page);
         ActionContext.SetObjectId(Page::"LAAI Time Entry API");

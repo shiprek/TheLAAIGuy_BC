@@ -27,6 +27,13 @@ codeunit 50151 "LAAI Time Sheet Entries"
         // Already on a time sheet: change that day's hours while the line is Open or
         // Rejected (TestStatus errors otherwise). A line deleted in BC gets a new one.
         if TimeSheetLine.Get(TimeEntry."Time Sheet No.", TimeEntry."Time Sheet Line No.") then begin
+            // Verify that the existing time sheet line belongs to the same resource, project and task
+            if (TimeSheetLine."Resource No." <> TimeEntry."Resource No.") or
+               (TimeSheetLine."Job No." <> TimeEntry."Project No.") or
+               (TimeSheetLine."Job Task No." <> TimeEntry."Project Task No.")
+            then
+                Error('The existing time sheet line does not belong to the same resource, project and task as this time entry.');
+            
             TimeSheetLine.TestStatus();
             TimeSheetDetail.Get(
                 TimeSheetLine."Time Sheet No.", TimeSheetLine."Line No.", TimeEntry.Date);
