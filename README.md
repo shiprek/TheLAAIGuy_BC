@@ -16,6 +16,8 @@ This repository contains the `LAAI Leads` and `LAAI Time Entry` per-tenant exten
 
 The project uses Microsoft AL-Go for GitHub. Each app has its own folder (`LeadExtension`, `TimeEntry`, and any new app folder). `appFolders` in `.AL-Go/settings.json` is empty, so AL-Go finds every app folder on its own. Deployment settings are in `.github/AL-Go-Settings.json`.
 
+One AL-Go system file carries a local edit: the device-login step in `.github/workflows/PublishToEnvironment.yaml` downloads AL-Go-Helper.ps1 with its companion modules, because the helper alone fails to load. **Update AL-Go System Files** overwrites it, so put that block back in every update PR before merging (the update on 2026-10-08 needed it).
+
 ### DEV
 
 1. Open a pull request into `main`. CodeRabbit reviews it and the **Pull Request Status Check** build must pass.
