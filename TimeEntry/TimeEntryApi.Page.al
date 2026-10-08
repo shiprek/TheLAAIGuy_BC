@@ -75,4 +75,16 @@ page 50151 "LAAI Time Entry API"
         ActionContext.AddEntityKey(Rec.FieldNo(SystemId), Rec.SystemId);
         ActionContext.SetResultCode(WebServiceActionResultCode::Updated);
     end;
+    [ServiceEnabled]
+    [Scope('Cloud')]
+    procedure ApproveTimeSheetLine(var ActionContext: WebServiceActionContext)
+    var
+        LAAITimeSheetEntries: Codeunit "LAAI Time Sheet Entries";
+    begin
+        LAAITimeSheetEntries.ApproveTimeSheetLine(Rec);
+        ActionContext.SetObjectType(ObjectType::Page);
+        ActionContext.SetObjectId(Page::"LAAI Time Entry API");
+        ActionContext.AddEntityKey(Rec.FieldNo(SystemId), Rec.SystemId);
+        ActionContext.SetResultCode(WebServiceActionResultCode::Updated);
+    end;
 }
