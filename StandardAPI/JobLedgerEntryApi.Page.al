@@ -1,4 +1,4 @@
-page 50102 "LAAI Job Ledger Entry API"
+page 50200 "LAAI Job Ledger Entry API"
 {
     PageType = API;
     APIPublisher = 'laai';

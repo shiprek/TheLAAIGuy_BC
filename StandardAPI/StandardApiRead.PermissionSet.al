@@ -1,4 +1,4 @@
-permissionset 50103 "LAAI Std API Read"
+permissionset 50200 "LAAI Std API Read"
 {
     Assignable = true;
     Permissions = tabledata "Job Ledger Entry" = R,

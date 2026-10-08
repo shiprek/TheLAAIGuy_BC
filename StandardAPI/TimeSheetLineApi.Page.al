@@ -1,4 +1,4 @@
-page 50109 "LAAI Time Sheet Line API"
+page 50201 "LAAI Time Sheet Line API"
 {
     PageType = API;
     APIPublisher = 'laai';
@@ -36,6 +36,7 @@ page 50109 "LAAI Time Sheet Line API"
                 field(posted; Rec.Posted) { Editable = false; }
                 field(totalQuantity; Rec."Total Quantity") { Editable = false; }
                 field(resourceNo; ResourceNo) { Editable = false; }
+                field(timeSheetNo; Rec."Time Sheet No.") { Editable = false; }
             }
         }
     }
