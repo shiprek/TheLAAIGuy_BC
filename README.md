@@ -18,6 +18,8 @@ The project uses Microsoft AL-Go for GitHub. Each app has its own folder (`LeadE
 
 One AL-Go system file carries a local edit: the device-login step in `.github/workflows/PublishToEnvironment.yaml` downloads AL-Go-Helper.ps1 with its companion modules, because the helper alone fails to load. **Update AL-Go System Files** overwrites it, so put that block back in every update PR before merging (the update on 2026-10-08 needed it).
 
+`artifact` in `.AL-Go/settings.json` pins the BC version the build compiles against (sandbox 29.0.54011.56023, us), so the artifact cache hits and a build takes about 3 minutes instead of 14. Move the pin to a newer version on purpose, in its own PR between pieces of work, and never to a version newer than DEV or TEST runs.
+
 ### DEV
 
 1. Open a pull request into `main`. CodeRabbit reviews it and the **Pull Request Status Check** build must pass.
