@@ -1,4 +1,3 @@
-// This file remains unchanged from the provided content
 page 50151 "LAAI Time Entry API"
 {
     PageType = API;
@@ -59,6 +58,18 @@ page 50151 "LAAI Time Entry API"
         LAAITimeSheetEntries: Codeunit "LAAI Time Sheet Entries";
     begin
         LAAITimeSheetEntries.PutOnTimeSheet(Rec);
+        ActionContext.SetObjectType(ObjectType::Page);
+        ActionContext.SetObjectId(Page::"LAAI Time Entry API");
+        ActionContext.AddEntityKey(Rec.FieldNo(SystemId), Rec.SystemId);
+        ActionContext.SetResultCode(WebServiceActionResultCode::Updated);
+    end;
+    [ServiceEnabled]
+    [Scope('Cloud')]
+    procedure SubmitTimeSheetLine(var ActionContext: WebServiceActionContext)
+    var
+        LAAITimeSheetEntries: Codeunit "LAAI Time Sheet Entries";
+    begin
+        LAAITimeSheetEntries.SubmitTimeSheetLine(Rec);
         ActionContext.SetObjectType(ObjectType::Page);
         ActionContext.SetObjectId(Page::"LAAI Time Entry API");
         ActionContext.AddEntityKey(Rec.FieldNo(SystemId), Rec.SystemId);
