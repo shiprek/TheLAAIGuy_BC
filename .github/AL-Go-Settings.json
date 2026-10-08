@@ -2,7 +2,10 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/AL-Go-Actions/v9.2/.Modules/settings.schema.json",
   "type": "PTE",
   "templateUrl": "https://github.com/microsoft/AL-Go-PTE@main",
-  "environments": ["DEV", "TEST"],
+  "environments": [
+    "DEV",
+    "TEST"
+  ],
   "useCompilerFolder": true,
   "doNotPublishApps": true,
   "enableCodeCop": true,
@@ -11,14 +14,19 @@
     "EnvironmentName": "DEV",
     "Scope": "PTE",
     "ContinuousDeployment": true,
-    "Branches": ["main"],
+    "Branches": [
+      "main"
+    ],
     "SyncMode": "Add"
   },
   "DeployToTEST": {
     "EnvironmentName": "TEST",
     "Scope": "PTE",
     "ContinuousDeployment": false,
-    "Branches": ["release"],
+    "Branches": [
+      "release"
+    ],
     "SyncMode": "Add"
-  }
+  },
+  "templateSha": "b7dd1f32feb254e07086096e8970fba1187d9a6e"
 }
