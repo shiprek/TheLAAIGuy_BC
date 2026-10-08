@@ -23,12 +23,14 @@ codeunit 50151 "LAAI Time Sheet Entries"
         TimeEntry.TestField("Project Task No.");
         TimeEntry.TestField("Resource No.");
         TimeEntry.TestField(Date);
+        TimeEntry.TestField(Status, TimeEntry.Status::Open);
         Hours := Round(TimeEntry."Active Minutes" / 60, 0.00001);
         // Already on a time sheet: change that day's hours while the line is Open or
         // Rejected (TestStatus errors otherwise). A line deleted in BC gets a new one.
         if TimeSheetLine.Get(TimeEntry."Time Sheet No.", TimeEntry."Time Sheet Line No.") then begin
             // Verify that the existing time sheet line belongs to the same resource, project and task
-            if (TimeSheetLine."Resource No." <> TimeEntry."Resource No.") or
+            TimeSheetHeader.Get(TimeSheetLine."Time Sheet No.");
+            if (TimeSheetHeader."Resource No." <> TimeEntry."Resource No.") or
                (TimeSheetLine."Job No." <> TimeEntry."Project No.") or
                (TimeSheetLine."Job Task No." <> TimeEntry."Project Task No.")
             then
