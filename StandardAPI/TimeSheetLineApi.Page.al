@@ -1,4 +1,4 @@
-page 50201 "LAAI Time Sheet Line API"
+page 50109 "LAAI Time Sheet Line API"
 {
     PageType = API;
     APIPublisher = 'laai';
@@ -9,13 +9,14 @@ page 50201 "LAAI Time Sheet Line API"
     EntityCaption = 'Time Sheet Line';
     EntitySetCaption = 'Time Sheet Lines';
     SourceTable = "Time Sheet Line";
-    ODataKeyFields = "Time Sheet No.";
+    ODataKeyFields = SystemId;
     DelayedInsert = true;
     Extensible = false;
     InsertAllowed = false;
     ModifyAllowed = false;
     DeleteAllowed = false;
     DataAccessIntent = ReadOnly;
+    Editable = false;
 
     layout
     {
@@ -23,17 +24,17 @@ page 50201 "LAAI Time Sheet Line API"
         {
             repeater(Records)
             {
-                field(timeSheetNo; Rec."Time Sheet No.") { Editable = false; }
-                field(lineNo; Rec."Line No.") { }
-                field(timeSheetStartingDate; Rec."Time Sheet Starting Date") { }
-                field(type; Rec.Type) { }
-                field(jobNo; Rec."Job No.") { }
-                field(jobTaskNo; Rec."Job Task No.") { }
-                field(description; Rec.Description) { }
-                field(workTypeCode; Rec."Work Type Code") { }
-                field(status; Rec.Status) { }
-                field(posted; Rec.Posted) { }
-                field(totalQuantity; Rec."Total Quantity") { }
+                field(id; Rec.SystemId) { Editable = false; }
+                field(lineNo; Rec."Line No.") { Editable = false; }
+                field(timeSheetStartingDate; Rec."Time Sheet Starting Date") { Editable = false; }
+                field(type; Rec.Type) { Editable = false; }
+                field(jobNo; Rec."Job No.") { Editable = false; }
+                field(jobTaskNo; Rec."Job Task No.") { Editable = false; }
+                field(description; Rec.Description) { Editable = false; }
+                field(workTypeCode; Rec."Work Type Code") { Editable = false; }
+                field(status; Rec.Status) { Editable = false; }
+                field(posted; Rec.Posted) { Editable = false; }
+                field(totalQuantity; Rec."Total Quantity") { Editable = false; }
                 field(resourceNo; ResourceNo) { Editable = false; }
             }
         }
