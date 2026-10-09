@@ -211,9 +211,11 @@ codeunit 50151 "LAAI Time Sheet Entries"
         TimeEntryFilter.SetRange("Time Sheet No.", TimeSheetDetail."Time Sheet No.");
         TimeEntryFilter.SetRange("Time Sheet Line No.", TimeSheetDetail."Time Sheet Line No.");
         TimeEntryFilter.SetRange(Date, TimeSheetDetail.Date);
-        TimeEntryFilter.SetRange(Status, TimeEntryFilter.Status::Open);
-        TimeEntryFilter.ModifyAll(Status, TimeEntryFilter.Status::Posted);
-        TimeEntryFilter.ModifyAll("Posted Entry No.", JobLedgEntryNo);
+        TimeEntryFilter.SetRange("Resource No.", TimeSheetHeader."Resource No.");
+        TimeEntryFilter.SetRange("Project No.", TimeSheetLine."Job No.");
+        TimeEntryFilter.SetRange("Project Task No.", TimeSheetLine."Job Task No.");
+        TimeEntryFilter.ModifyAll("Posted Entry No.", JobLedgEntryNo, true);
+        TimeEntryFilter.ModifyAll(Status, TimeEntryFilter.Status::Posted, true);
 
         // Re-read the time entry to get updated values
         TimeEntry.Get(TimeEntry."Entry No.");
