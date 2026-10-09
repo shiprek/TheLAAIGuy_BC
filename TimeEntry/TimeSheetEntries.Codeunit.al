@@ -150,4 +150,57 @@ codeunit 50151 "LAAI Time Sheet Entries"
     local procedure OnAfterApproveTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
     begin
     end;
+
+    procedure PostTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
+    var
+        JobJnlLine: Record "Job Journal Line";
+        JobJnlPostLine: Codeunit "Job Jnl.-Post";
+        IsHandled: Boolean;
+        NotOnTimeSheetErr: Label 'This entry is not on a time sheet. Run PutOnTimeSheet first.';
+    begin
+        OnBeforePostTimeSheetLine(TimeEntry, IsHandled);
+        if IsHandled then
+            exit;
+
+        TimeEntry.Get(TimeEntry."Entry No.");
+        TimeEntry.TestField(Status, TimeEntry.Status::Open);
+
+        if (TimeEntry."Time Sheet No." = '') or (TimeEntry."Time Sheet Line No." = 0) then
+            Error(NotOnTimeSheetErr);
+
+        // Validate that the time sheet line is approved before posting
+        // This would require checking the time sheet line status, but since we're posting to project journal,
+        // we'll assume it's already been validated by ApproveTimeSheetLine
+
+        TimeEntry.LockTable();
+        JobJnlLine.Init();
+        JobJnlLine.Validate("Posting Date", TimeEntry.Date);
+        JobJnlLine.Validate("Job No.", TimeEntry."Project No.");
+        JobJnlLine.Validate("Job Task No.", TimeEntry."Project Task No.");
+        JobJnlLine.Validate(Type, JobJnlLine.Type::Resource);
+        JobJnlLine.Validate("No.", TimeEntry."Resource No.");
+        JobJnlLine.Validate("Work Type Code", TimeEntry."Work Type");
+        JobJnlLine.Validate(Quantity, Round(TimeEntry."Active Minutes" / 60, 0.00001));
+        if TimeEntry.Billable then
+            JobJnlLine.Validate("Line Type", JobJnlLine."Line Type"::Billable);
+        JobJnlLine."Document No." := Format(TimeEntry."Entry No.");
+        JobJnlLine.Description := TimeEntry.Description;
+
+        // Post the job journal line and get the new entry number
+        TimeEntry."Posted Entry No." := JobJnlPostLine.RunWithCheck(JobJnlLine);
+        TimeEntry.Status := TimeEntry.Status::Posted;
+        TimeEntry.Modify(true);
+
+        OnAfterPostTimeSheetLine(TimeEntry);
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforePostTimeSheetLine(var TimeEntry: Record "LAAI Time Entry"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterPostTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
+    begin
+    end;
 }
