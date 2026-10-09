@@ -150,4 +150,90 @@ codeunit 50151 "LAAI Time Sheet Entries"
     local procedure OnAfterApproveTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
     begin
     end;
+
+    procedure PostTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
+    var
+        TimeSheetHeader: Record "Time Sheet Header";
+        TimeSheetLine: Record "Time Sheet Line";
+        TimeSheetDetail: Record "Time Sheet Detail";
+        JobJnlLine: Record "Job Journal Line";
+        JobJnlPostLine: Codeunit "Job Jnl.-Post Line";
+        QtyToPost: Decimal;
+        JobLedgEntryNo: Integer;
+        IsHandled: Boolean;
+        NotOnTimeSheetErr: Label 'This entry is not on a time sheet. Run PutOnTimeSheet first.';
+        NothingToPostErr: Label 'This entry''s day on its time sheet is already posted.';
+        SharedDayErr: Label 'There must be exactly one time entry for this day, project and task.';
+        TimeEntryFilter: Record "LAAI Time Entry";
+    begin
+        OnBeforePostTimeSheetLine(TimeEntry, IsHandled);
+        if IsHandled then
+            exit;
+        TimeEntry.Get(TimeEntry."Entry No.");
+        TimeEntry.TestField(Status, TimeEntry.Status::Open);
+        if not TimeSheetLine.Get(TimeEntry."Time Sheet No.", TimeEntry."Time Sheet Line No.") then
+            Error(NotOnTimeSheetErr);
+        // The numbers are editable through the API, so the line must be this row's own.
+        TimeSheetHeader.Get(TimeSheetLine."Time Sheet No.");
+        TimeSheetHeader.TestField("Resource No.", TimeEntry."Resource No.");
+        TimeSheetLine.TestField("Job No.", TimeEntry."Project No.");
+        TimeSheetLine.TestField("Job Task No.", TimeEntry."Project Task No.");
+        // ...and hold this row's day: another week's line for the same task is not it.
+        if not TimeSheetDetail.Get(
+            TimeSheetLine."Time Sheet No.", TimeSheetLine."Line No.", TimeEntry.Date) then
+            Error(NotOnTimeSheetErr);
+        // Suggest Lines from Time Sheets takes only Approved lines and unposted days.
+        TimeSheetLine.TestField(Status, TimeSheetLine.Status::Approved);
+        QtyToPost := TimeSheetDetail.GetMaxQtyToPost();
+        if QtyToPost = 0 then
+            Error(NothingToPostErr);
+        JobJnlLine.Init();
+        JobJnlLine."Time Sheet No." := TimeSheetDetail."Time Sheet No.";
+        JobJnlLine."Time Sheet Line No." := TimeSheetDetail."Time Sheet Line No.";
+        JobJnlLine."Time Sheet Date" := TimeSheetDetail.Date;
+        JobJnlLine.Validate("Job No.", TimeSheetDetail."Job No.");
+        JobJnlLine.Validate("Job Task No.", TimeSheetDetail."Job Task No.");
+        JobJnlLine.Validate(Type, JobJnlLine.Type::Resource);
+        JobJnlLine.Validate("No.", TimeSheetHeader."Resource No.");
+        if TimeSheetLine."Work Type Code" <> '' then
+            JobJnlLine.Validate("Work Type Code", TimeSheetLine."Work Type Code");
+        JobJnlLine.Validate("Posting Date", TimeSheetDetail.Date);
+        JobJnlLine."Document No." := TimeSheetDetail."Time Sheet No.";
+        JobJnlLine.Description := TimeSheetLine.Description;
+        JobJnlLine.Validate(Quantity, QtyToPost);
+        JobJnlLine.Validate(Chargeable, TimeSheetLine.Chargeable);
+        // A billable usage line makes the project's billable planning line, so the time
+        // can be invoiced; BC allows Billable only on a chargeable line.
+        if TimeSheetLine.Chargeable then
+            JobJnlLine.Validate("Line Type", JobJnlLine."Line Type"::Billable);
+        JobLedgEntryNo := JobJnlPostLine.RunWithCheck(JobJnlLine);
+
+        // Mark all Open LAAI Time Entries for this time sheet line and day as Posted
+        TimeEntryFilter.SetRange("Time Sheet No.", TimeSheetDetail."Time Sheet No.");
+        TimeEntryFilter.SetRange("Time Sheet Line No.", TimeSheetDetail."Time Sheet Line No.");
+        TimeEntryFilter.SetRange(Date, TimeSheetDetail.Date);
+        TimeEntryFilter.SetRange("Resource No.", TimeSheetHeader."Resource No.");
+        TimeEntryFilter.SetRange("Project No.", TimeSheetLine."Job No.");
+        TimeEntryFilter.SetRange("Project Task No.", TimeSheetLine."Job Task No.");
+        TimeEntryFilter.SetRange(Status, TimeEntryFilter.Status::Open);
+        if TimeEntryFilter.Count() <> 1 then
+            Error(SharedDayErr);
+        TimeEntryFilter.ModifyAll("Posted Entry No.", JobLedgEntryNo, true);
+        TimeEntryFilter.ModifyAll(Status, TimeEntryFilter.Status::Posted, true);
+
+        // Re-read the time entry to get updated values
+        TimeEntry.Get(TimeEntry."Entry No.");
+
+        OnAfterPostTimeSheetLine(TimeEntry);
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforePostTimeSheetLine(var TimeEntry: Record "LAAI Time Entry"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterPostTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
+    begin
+    end;
 }
