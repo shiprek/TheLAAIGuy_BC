@@ -163,6 +163,7 @@ codeunit 50151 "LAAI Time Sheet Entries"
         IsHandled: Boolean;
         NotOnTimeSheetErr: Label 'This entry is not on a time sheet. Run PutOnTimeSheet first.';
         NothingToPostErr: Label 'This entry''s day on its time sheet is already posted.';
+        SharedDayErr: Label 'There must be exactly one time entry for this day, project and task.';
         TimeEntryFilter: Record "LAAI Time Entry";
     begin
         OnBeforePostTimeSheetLine(TimeEntry, IsHandled);
@@ -215,6 +216,8 @@ codeunit 50151 "LAAI Time Sheet Entries"
         TimeEntryFilter.SetRange("Project No.", TimeSheetLine."Job No.");
         TimeEntryFilter.SetRange("Project Task No.", TimeSheetLine."Job Task No.");
         TimeEntryFilter.SetRange(Status, TimeEntryFilter.Status::Open);
+        if TimeEntryFilter.Count() <> 1 then
+            Error(SharedDayErr);
         TimeEntryFilter.ModifyAll("Posted Entry No.", JobLedgEntryNo, true);
         TimeEntryFilter.ModifyAll(Status, TimeEntryFilter.Status::Posted, true);
 
