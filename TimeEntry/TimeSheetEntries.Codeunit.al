@@ -184,7 +184,7 @@ codeunit 50151 "LAAI Time Sheet Entries"
         // Suggest Lines from Time Sheets takes only Approved lines and unposted days.
         TimeSheetLine.TestField(Status, TimeSheetLine.Status::Approved);
         QtyToPost := TimeSheetDetail.GetMaxQtyToPost();
-        if QtyToPost == 0 then
+        if QtyToPost = 0 then
             Error(NothingToPostErr);
         JobJnlLine.Init();
         JobJnlLine."Time Sheet No." := TimeSheetDetail."Time Sheet No.";
