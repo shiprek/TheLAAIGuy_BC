@@ -163,6 +163,8 @@ codeunit 50151 "LAAI Time Sheet Entries"
         IsHandled: Boolean;
         NotOnTimeSheetErr: Label 'This entry is not on a time sheet. Run PutOnTimeSheet first.';
         NothingToPostErr: Label 'This entry''s day on its time sheet is already posted.';
+        TimeEntryFilter: Record "LAAI Time Entry";
+        TimeEntryCount: Integer;
     begin
         OnBeforePostTimeSheetLine(TimeEntry, IsHandled);
         if IsHandled then
@@ -205,6 +207,19 @@ codeunit 50151 "LAAI Time Sheet Entries"
         if TimeSheetLine.Chargeable then
             JobJnlLine.Validate("Line Type", JobJnlLine."Line Type"::Billable);
         JobLedgEntryNo := JobJnlPostLine.RunWithCheck(JobJnlLine);
+
+        // Mark all Open LAAI Time Entries for this time sheet line and day as Posted
+        TimeEntryFilter.SetRange("Time Sheet No.", TimeSheetDetail."Time Sheet No.");
+        TimeEntryFilter.SetRange("Time Sheet Line No.", TimeSheetDetail."Time Sheet Line No.");
+        TimeEntryFilter.SetRange(Date, TimeSheetDetail.Date);
+        TimeEntryFilter.SetRange(Status, TimeEntryFilter.Status::Open);
+        if TimeEntryFilter.FindSet() then
+            repeat
+                TimeEntryFilter.Status := TimeEntryFilter.Status::Posted;
+                TimeEntryFilter."Posted Entry No." := JobLedgEntryNo;
+                TimeEntryFilter.Modify(true);
+            until TimeEntryFilter.Next() = 0;
+
         OnAfterPostTimeSheetLine(TimeEntry);
     end;
 
