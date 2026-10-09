@@ -184,7 +184,7 @@ codeunit 50151 "LAAI Time Sheet Entries"
         // Suggest Lines from Time Sheets takes only Approved lines and unposted days.
         TimeSheetLine.TestField(Status, TimeSheetLine.Status::Approved);
         QtyToPost := TimeSheetDetail.GetMaxQtyToPost();
-        if QtyToPost = 0 then
+        if QtyToPost == 0 then
             Error(NothingToPostErr);
         JobJnlLine.Init();
         JobJnlLine."Time Sheet No." := TimeSheetDetail."Time Sheet No.";
@@ -214,6 +214,7 @@ codeunit 50151 "LAAI Time Sheet Entries"
         TimeEntryFilter.SetRange("Resource No.", TimeSheetHeader."Resource No.");
         TimeEntryFilter.SetRange("Project No.", TimeSheetLine."Job No.");
         TimeEntryFilter.SetRange("Project Task No.", TimeSheetLine."Job Task No.");
+        TimeEntryFilter.SetRange(Status, TimeEntryFilter.Status::Open);
         TimeEntryFilter.ModifyAll("Posted Entry No.", JobLedgEntryNo, true);
         TimeEntryFilter.ModifyAll(Status, TimeEntryFilter.Status::Posted, true);
 
