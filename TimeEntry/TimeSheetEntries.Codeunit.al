@@ -112,4 +112,42 @@ codeunit 50151 "LAAI Time Sheet Entries"
     local procedure OnAfterSubmitTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
     begin
     end;
+
+    procedure ApproveTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
+    var
+        TimeSheetHeader: Record "Time Sheet Header";
+        TimeSheetLine: Record "Time Sheet Line";
+        TimeSheetDetail: Record "Time Sheet Detail";
+        TimeSheetApprovalMgt: Codeunit "Time Sheet Approval Management";
+        IsHandled: Boolean;
+        NotOnTimeSheetErr: Label 'This entry is not on a time sheet. Run PutOnTimeSheet first.';
+    begin
+        OnBeforeApproveTimeSheetLine(TimeEntry, IsHandled);
+        if IsHandled then
+            exit;
+        TimeEntry.Get(TimeEntry."Entry No.");
+        TimeEntry.TestField(Status, TimeEntry.Status::Open);
+        if not TimeSheetLine.Get(TimeEntry."Time Sheet No.", TimeEntry."Time Sheet Line No.") then
+            Error(NotOnTimeSheetErr);
+        // The numbers are editable through the API, so the line must be this row's own.
+        TimeSheetHeader.Get(TimeSheetLine."Time Sheet No.");
+        TimeSheetHeader.TestField("Resource No.", TimeEntry."Resource No.");
+        TimeSheetLine.TestField("Job No.", TimeEntry."Project No.");
+        TimeSheetLine.TestField("Job Task No.", TimeEntry."Project Task No.");
+        // Check that the time sheet line holds this entry's date
+        TimeSheetDetail.Get(
+            TimeSheetLine."Time Sheet No.", TimeSheetLine."Line No.", TimeEntry.Date);
+        TimeSheetApprovalMgt.Approve(TimeSheetLine);
+        OnAfterApproveTimeSheetLine(TimeEntry);
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeApproveTimeSheetLine(var TimeEntry: Record "LAAI Time Entry"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterApproveTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
+    begin
+    end;
 }
