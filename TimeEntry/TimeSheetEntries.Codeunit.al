@@ -117,6 +117,7 @@ codeunit 50151 "LAAI Time Sheet Entries"
     var
         TimeSheetHeader: Record "Time Sheet Header";
         TimeSheetLine: Record "Time Sheet Line";
+        TimeSheetDetail: Record "Time Sheet Detail";
         TimeSheetApprovalMgt: Codeunit "Time Sheet Approval Management";
         IsHandled: Boolean;
         NotOnTimeSheetErr: Label 'This entry is not on a time sheet. Run PutOnTimeSheet first.';
@@ -133,6 +134,9 @@ codeunit 50151 "LAAI Time Sheet Entries"
         TimeSheetHeader.TestField("Resource No.", TimeEntry."Resource No.");
         TimeSheetLine.TestField("Job No.", TimeEntry."Project No.");
         TimeSheetLine.TestField("Job Task No.", TimeEntry."Project Task No.");
+        // Check that the time sheet line holds this entry's date
+        TimeSheetDetail.Get(
+            TimeSheetLine."Time Sheet No.", TimeSheetLine."Line No.", TimeEntry.Date);
         TimeSheetApprovalMgt.Approve(TimeSheetLine);
         OnAfterApproveTimeSheetLine(TimeEntry);
     end;
