@@ -243,6 +243,7 @@ codeunit 50151 "LAAI Time Sheet Entries"
         TimeSheetLine: Record "Time Sheet Line";
         TimeSheetDetail: Record "Time Sheet Detail";
         JobLedgEntry: Record "Job Ledger Entry";
+        SharedLedgerErr: Label 'More than one project ledger entry matches this entry''s day, project and task, so it can''t be marked Posted.';
         IsHandled: Boolean;
         NotOnTimeSheetErr: Label 'This entry is not on a time sheet.';
     begin
@@ -274,8 +275,12 @@ codeunit 50151 "LAAI Time Sheet Entries"
         JobLedgEntry.SetRange("No.", TimeEntry."Resource No.");
         JobLedgEntry.SetRange("Posting Date", TimeEntry.Date);
         JobLedgEntry.SetRange("Document No.", TimeEntry."Time Sheet No.");
-        if (JobLedgEntry.Count() = 1) and JobLedgEntry.FindFirst() then
+        if JobLedgEntry.Count() > 1 then
+            Error(SharedLedgerErr);
+        if JobLedgEntry.Count() = 1 then begin
+            JobLedgEntry.FindFirst();
             TimeEntry."Posted Entry No." := JobLedgEntry."Entry No.";
+        end;
 
         TimeEntry.Status := TimeEntry.Status::Posted;
         TimeEntry.Modify(true);
