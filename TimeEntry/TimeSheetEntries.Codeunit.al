@@ -236,4 +236,60 @@ codeunit 50151 "LAAI Time Sheet Entries"
     local procedure OnAfterPostTimeSheetLine(var TimeEntry: Record "LAAI Time Entry")
     begin
     end;
+
+    procedure MarkTimeSheetLinePosted(var TimeEntry: Record "LAAI Time Entry")
+    var
+        TimeSheetHeader: Record "Time Sheet Header";
+        TimeSheetLine: Record "Time Sheet Line";
+        TimeSheetDetail: Record "Time Sheet Detail";
+        JobLedgEntry: Record "Job Ledger Entry";
+        IsHandled: Boolean;
+        NotOnTimeSheetErr: Label 'This entry is not on a time sheet.';
+    begin
+        OnBeforeMarkTimeSheetLinePosted(TimeEntry, IsHandled);
+        if IsHandled then
+            exit;
+
+        TimeEntry.Get(TimeEntry."Entry No.");
+        TimeEntry.TestField(Status, TimeEntry.Status::Open);
+
+        if not TimeSheetLine.Get(TimeEntry."Time Sheet No.", TimeEntry."Time Sheet Line No.") then
+            Error(NotOnTimeSheetErr);
+
+        if not TimeSheetHeader.Get(TimeSheetLine."Time Sheet No.") then
+            Error(NotOnTimeSheetErr);
+        TimeSheetHeader.TestField("Resource No.", TimeEntry."Resource No.");
+        TimeSheetLine.TestField("Job No.", TimeEntry."Project No.");
+        TimeSheetLine.TestField("Job Task No.", TimeEntry."Project Task No.");
+
+        if not TimeSheetDetail.Get(
+            TimeSheetLine."Time Sheet No.", TimeSheetLine."Line No.", TimeEntry.Date) then
+            Error(NotOnTimeSheetErr);
+
+        TimeSheetDetail.TestField(Posted, true);
+
+        JobLedgEntry.SetRange("Job No.", TimeEntry."Project No.");
+        JobLedgEntry.SetRange("Job Task No.", TimeEntry."Project Task No.");
+        JobLedgEntry.SetRange(Type, JobLedgEntry.Type::Resource);
+        JobLedgEntry.SetRange("No.", TimeEntry."Resource No.");
+        JobLedgEntry.SetRange("Posting Date", TimeEntry.Date);
+        JobLedgEntry.SetRange("Document No.", TimeEntry."Time Sheet No.");
+        if (JobLedgEntry.Count() = 1) and JobLedgEntry.FindFirst() then
+            TimeEntry."Posted Entry No." := JobLedgEntry."Entry No.";
+
+        TimeEntry.Status := TimeEntry.Status::Posted;
+        TimeEntry.Modify(true);
+
+        OnAfterMarkTimeSheetLinePosted(TimeEntry);
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeMarkTimeSheetLinePosted(var TimeEntry: Record "LAAI Time Entry"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterMarkTimeSheetLinePosted(var TimeEntry: Record "LAAI Time Entry")
+    begin
+    end;
 }
