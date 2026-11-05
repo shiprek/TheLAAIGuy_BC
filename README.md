@@ -36,17 +36,18 @@ flowchart LR
     B --> C[CodeRabbit review, status required]
     C --> D[Merge]
     D --> E[CI/CD on main deploys DEV]
-    E --> F[Fast-forward release]
-    F --> G[Publish To Environment deploys TEST]
+    E --> F[Fast-forward release to the validated commit]
+    F --> G[Run CI/CD manually on release]
+    G --> H[Publish To Environment deploys TEST]
 ```
 
 1. **Pull request.** Every change to `main` arrives as a pull request. The branch ruleset blocks direct pushes, force-pushes and deletion of `main`.
 2. **Build and analysis.** The AL-Go **Pull Request Build** workflow compiles every app against a pinned Business Central artifact, with the CodeCop and UICop analyzers on. Its **Pull Request Status Check** must pass.
 3. **Automated review.** CodeRabbit reviews every pull request. Its **CodeRabbit** status must pass, and every review thread must be resolved before merge.
 4. **Merge.** Agent pull requests auto-merge once those required checks pass and the threads are resolved.
-5. **DEV.** The **CI/CD** workflow runs on `main`, builds the apps and deploys them to the DEV sandbox on its own (continuous deployment).
-6. **Promote.** After DEV is validated, `release` is fast-forwarded to that same commit on `main`.
-7. **TEST.** **Publish To Environment** deploys from `release` to the TEST sandbox. TEST accepts deployments only from `release` and is never deployed automatically, so nothing reaches TEST without passing DEV first.
+5. **DEV.** The **CI/CD** workflow runs on each push to `main`, builds the apps and deploys them to the DEV sandbox on its own (continuous deployment). A merge that changes only Markdown does not start it.
+6. **Promote.** After DEV is validated, `release` is fast-forwarded to the exact commit that was validated in DEV.
+7. **TEST.** **CI/CD** is run manually on `release`, because a push to `release` does not start it. **Publish To Environment** then deploys that build to the TEST sandbox. TEST accepts deployments only from `release` and is never deployed automatically. The procedure is to promote only a commit that has passed DEV.
 
 No production environment is configured yet.
 

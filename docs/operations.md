@@ -13,15 +13,15 @@ One AL-Go system file carries a local edit: the device-login step in `.github/wo
 ### DEV
 
 1. Open a pull request into `main`. CodeRabbit reviews it and the **Pull Request Status Check** build must pass.
-2. Merge it. BC agent pull requests auto-merge once the build is green and CodeRabbit approves.
-3. The **CI/CD** run on `main` builds the apps and deploys them to DEV on its own (`DeployToDEV.ContinuousDeployment`). No manual publish is needed.
+2. Merge it. BC agent pull requests auto-merge once the build is green, CodeRabbit approves, and every review thread is resolved.
+3. The **CI/CD** run on `main` builds the apps and deploys them to DEV on its own (`DeployToDEV.ContinuousDeployment`). No manual publish is needed. CI/CD ignores pushes that change only Markdown (`paths-ignore` in `CICD.yaml`), so a docs-only merge deploys nothing; run CI/CD manually on `main` if DEV needs a fresh deploy.
 4. Validate the change in the DEV sandbox.
 
 ### TEST
 
-TEST only accepts deployments from the `release` branch. This is set in `DeployToTEST.Branches` and in the TEST GitHub Environment's deployment branch policy, so nothing reaches TEST without landing in DEV first. The same validated commit is promoted; nothing is rebuilt from different code.
+TEST only accepts deployments from the `release` branch. This is set in `DeployToTEST.Branches` and in the TEST GitHub Environment's deployment branch policy. **Publish To Environment** is started by hand and accepts other app versions, so the settings alone do not stop an unvalidated build from reaching TEST. The procedure does: promote only the exact commit validated in DEV, and publish the build of that commit.
 
-1. Fast-forward `release` to the validated commit on `main` (`git checkout release && git merge --ff-only main && git push`).
+1. Fast-forward `release` to the exact commit validated in DEV (`git checkout release && git merge --ff-only <validated-sha> && git push`). Do not merge `main` itself, which may have moved on since DEV was validated.
 2. Run the **CI/CD** workflow manually on `release` (a push to `release` does not start it).
 3. Run **Publish To Environment** from the `release` branch with app version `current` and environment `TEST`.
 
@@ -29,7 +29,7 @@ No production environment is configured yet.
 
 ## Website intake import
 
-Export the `Website Intakes` worksheet from Google Sheets as CSV. In Business Central, open **Website Intakes** and choose **Import Website Intakes**. Duplicate rows are ignored using the website intake ID.
+Export the `Website Intakes` worksheet from Google Sheets as CSV. In Business Central, open **Website Intakes** and choose **Import Website Intakes**. Rows whose website intake ID (`Submission Id`) is already in Business Central are skipped. A row with a blank intake ID is always imported, so it can create a duplicate.
 
 All customer, lead, quote, and order creation remains a reviewed Business Central action. Existing customers are linked directly and do not create a lead.
 
@@ -41,7 +41,7 @@ Quick reference:
 
 1. Convert the list to `data/leads/<batch-id>.json` (see `data/leads/2026-09-14-la-small-business.json` for the format) and commit it.
 2. `gh workflow run ImportLeads.yaml --ref <main|release> -f environmentName=<DEV|TEST> -f leadsFile=data/leads/<batch-id>.json`
-3. Re-running the same batch file is safe - it's create-only and skips any Company Name already present, never updates or deletes.
+3. Re-running the same batch file is safe once the previous run has finished - it's create-only and skips any Company Name already present, never updates or deletes. The script reads the existing leads once at the start, so two runs that overlap can both create the same lead. Start one run at a time.
 4. `gh run download <run-id> -n import-results` retrieves each row's BC-assigned `No.` (for building a spreadsheet back for the setup user).
 
 The `LAAI Lead API` (page 50108) reuses the same app-only auth pattern (federated OIDC, `API.ReadWrite.All`, per-environment `LAAI LEADS` permission set, company selected by name not index) that `LAAI Customer Posting Grp API` uses, as documented in the maintainer's private GitHub-to-Business-Central playbook.
