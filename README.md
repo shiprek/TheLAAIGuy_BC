@@ -45,7 +45,7 @@ flowchart LR
 2. **Build and analysis.** The AL-Go **Pull Request Build** workflow compiles every app against a pinned Business Central artifact, with the CodeCop and UICop analyzers on. Its **Pull Request Status Check** must pass.
 3. **Automated review.** CodeRabbit reviews every pull request. Its **CodeRabbit** status must pass, and every review thread must be resolved before merge.
 4. **Merge.** Agent pull requests auto-merge once those required checks pass and the threads are resolved.
-5. **DEV.** The **CI/CD** workflow runs on each push to `main`, builds the apps and deploys them to the DEV sandbox on its own (continuous deployment). A merge that changes only Markdown does not start it.
+5. **DEV.** The **CI/CD** workflow runs on each push to `main`, builds the apps and deploys them to the DEV sandbox on its own (continuous deployment). A merge that changes only Markdown files, or only workflow files other than `CICD.yaml`, does not start it.
 6. **Promote.** After DEV is validated, `release` is fast-forwarded to the exact commit that was validated in DEV.
 7. **TEST.** **CI/CD** is run manually on `release`, because a push to `release` does not start it. **Publish To Environment** then deploys that build to the TEST sandbox. TEST accepts deployments only from `release` and is never deployed automatically. The procedure is to promote only a commit that has passed DEV.
 

@@ -14,7 +14,7 @@ One AL-Go system file carries a local edit: the device-login step in `.github/wo
 
 1. Open a pull request into `main`. CodeRabbit reviews it and the **Pull Request Status Check** build must pass.
 2. Merge it. BC agent pull requests auto-merge once the build is green, CodeRabbit approves, and every review thread is resolved.
-3. The **CI/CD** run on `main` builds the apps and deploys them to DEV on its own (`DeployToDEV.ContinuousDeployment`). No manual publish is needed. CI/CD ignores pushes that change only Markdown (`paths-ignore` in `CICD.yaml`), so a docs-only merge deploys nothing; run CI/CD manually on `main` if DEV needs a fresh deploy.
+3. The **CI/CD** run on `main` builds the apps and deploys them to DEV on its own (`DeployToDEV.ContinuousDeployment`). No manual publish is needed. CI/CD ignores pushes that change only Markdown files or only workflow files other than `CICD.yaml` (`paths-ignore` in `CICD.yaml`), so such a merge deploys nothing; run CI/CD manually on `main` if DEV needs a fresh deploy.
 4. Validate the change in the DEV sandbox.
 
 ### TEST
