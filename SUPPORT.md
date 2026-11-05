@@ -1,11 +1,6 @@
 # Support
 
-## How to file issues and get help
+This repo is a personal showcase: Business Central per-tenant extensions built and shipped with [Microsoft AL-Go for GitHub](https://github.com/microsoft/AL-Go). It is shared for review, and there is no support commitment.
 
-This GitHub repo is auto-generated from https://github.com/microsoft/AL-Go. Issues, bug tracking and feature requests should be done there.
-
-Please follow the documentation [here](https://github.com/microsoft/AL-Go/blob/main/Scenarios/Contribute.md) if you want to contribute to AL-Go for GitHub.
-
-## Microsoft Support Policy
-
-Support for this **PROJECT or PRODUCT** is limited to the resources listed above.
+- Questions or problems with the code in this repo: open an issue here.
+- Bugs or feature requests for AL-Go for GitHub itself (its workflows, actions or templates): report them at [microsoft/AL-Go](https://github.com/microsoft/AL-Go/issues).
