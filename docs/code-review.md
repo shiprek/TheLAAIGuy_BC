@@ -2,7 +2,7 @@
 
 Review only. No AL was edited.
 
-[AGENTS.md](../AGENTS.md) says the AL in this repo is written by the local Business Central agent and committed unedited. Analyzer findings are evidence about the agent. Fixes go into the prompts and checks in [LAAI-Document-Library](https://github.com/shiprek/LAAI-Document-Library), not into these files by hand. This note is the list of what the next draft should change, and what a human should not "clean up" in place.
+[AGENTS.md](../AGENTS.md) says the AL in this repo is written by the local Business Central agent and committed unedited. Analyzer findings are evidence about the agent. Fixes go into the agent's private prompt and checks library, not into these files by hand. This note is the list of what the next draft should change, and what a human should not "clean up" in place.
 
 Bar: Microsoft's [AL coding guidelines](https://learn.microsoft.com/dynamics365/business-central/dev-itpro/compliance/apptest-bestpracticesforalcode) and [alguidelines.dev](https://alguidelines.dev/), plus upgrade-safe procedure structure: integration events, extensible enums, stable API versions, no UI inside codeunits, and id ranges that match `app.json`.
 
@@ -50,4 +50,4 @@ Bar: Microsoft's [AL coding guidelines](https://learn.microsoft.com/dynamics365/
 
 ## What not to do with this review
 
-Do not open a pull request that restyles this AL to satisfy CodeCop or the notes above. Change LAAI-Document-Library so the next agent draft fails the check, then let the agent publish the AL. `app.json` version pins, if you change them, are a human decision about which BC version you support, not an agent restyle.
+Do not open a pull request that restyles this AL to satisfy CodeCop or the notes above. Change the agent's prompts and checks so the next agent draft fails the check, then let the agent publish the AL. `app.json` version pins, if you change them, are a human decision about which BC version you support, not an agent restyle.

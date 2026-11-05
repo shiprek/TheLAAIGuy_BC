@@ -1,8 +1,16 @@
-# The LA AI Guy — Business Central Extension
+# The LA AI Guy — Business Central Extensions
 
-This repository contains the `LAAI Leads` and `LAAI Time Entry` per-tenant extensions for Microsoft Dynamics 365 Business Central.
+Per-tenant extensions for Microsoft Dynamics 365 Business Central, built and shipped with [Microsoft AL-Go for GitHub](https://github.com/microsoft/AL-Go). The repo is a worked example of full push development: every change is a pull request that builds, is analysed and reviewed, merges, and deploys itself to DEV. A `release` branch then promotes the same commit to TEST.
 
-## Features
+Author: [The LA AI Guy](https://www.thelaaiguy.com) · GitHub [shiprek](https://github.com/shiprek). Shared for review; no license is granted.
+
+## The apps
+
+Each app has its own folder and `app.json`. AL-Go finds and builds every app folder on its own.
+
+### `LeadExtension` — LAAI Leads (ids 50100–50149)
+
+Lead tracking and website intake management. It adds:
 
 - Lead tracking and lead-to-customer conversion
 - A separate Website Intake entity for Squarespace submissions
@@ -10,52 +18,51 @@ This repository contains the `LAAI Leads` and `LAAI Time Entry` per-tenant exten
 - Controlled creation of open sales quotes and sales orders
 - Website-origin and intake-reference fields on sales documents
 - CSV import matching the 21-column `Website Intakes` Google Sheet export
-- API page for future direct integrations
+- API pages for leads, website intakes and customer posting groups
 
-## Build and deployment
+### `TimeEntry` — LAAI Time Entry (ids 50150–50199)
 
-The project uses Microsoft AL-Go for GitHub. Each app has its own folder (`LeadExtension`, `TimeEntry`, and any new app folder). `appFolders` in `.AL-Go/settings.json` is empty, so AL-Go finds every app folder on its own. Deployment settings are in `.github/AL-Go-Settings.json`.
+A `LAAI Time Entry` table, list page and API page for recording time against a customer and project. A codeunit posts an open entry to the project through a job journal line, and another puts it on the resource's time sheet as a project line, then submits, approves and posts that line.
 
-One AL-Go system file carries a local edit: the device-login step in `.github/workflows/PublishToEnvironment.yaml` downloads AL-Go-Helper.ps1 with its companion modules, because the helper alone fails to load. **Update AL-Go System Files** overwrites it, so put that block back in every update PR before merging (the update on 2026-10-08 needed it).
+### `StandardAPI` — LAAI Standard API (ids 50200–50249)
 
-`artifact` in `.AL-Go/settings.json` pins the BC version the build compiles against (sandbox 29.0.54011.56023, us), so the artifact cache hits and a build takes about 3 minutes instead of 14. Move the pin to a newer version on purpose, in its own PR between pieces of work, and never to a version newer than DEV or TEST runs.
+Two read-only API pages over standard Business Central tables: `LAAI Job Ledger Entry API` (`jobLedgerEntries`) and `LAAI Time Sheet Line API` (`timeSheetLines`). The `LAAI Std API Read` permission set grants read access only.
 
-### DEV
+## How a change ships
 
-1. Open a pull request into `main`. CodeRabbit reviews it and the **Pull Request Status Check** build must pass.
-2. Merge it. BC agent pull requests auto-merge once the build is green and CodeRabbit approves.
-3. The **CI/CD** run on `main` builds the apps and deploys them to DEV on its own (`DeployToDEV.ContinuousDeployment`). No manual publish is needed.
-4. Validate the change in the DEV sandbox.
+```mermaid
+flowchart LR
+    A[Pull request into main] --> B[AL-Go build with CodeCop and UICop]
+    B --> C[CodeRabbit review, status required]
+    C --> D[Merge]
+    D --> E[CI/CD on main deploys DEV]
+    E --> F[Fast-forward release]
+    F --> G[Publish To Environment deploys TEST]
+```
 
-### TEST
-
-TEST only accepts deployments from the `release` branch. This is set in `DeployToTEST.Branches` and in the TEST GitHub Environment's deployment branch policy, so nothing reaches TEST without landing in DEV first. The same validated commit is promoted; nothing is rebuilt from different code.
-
-1. Fast-forward `release` to the validated commit on `main` (`git checkout release && git merge --ff-only main && git push`).
-2. Run the **CI/CD** workflow manually on `release` (a push to `release` does not start it).
-3. Run **Publish To Environment** from the `release` branch with app version `current` and environment `TEST`.
+1. **Pull request.** Every change to `main` arrives as a pull request. The branch ruleset blocks direct pushes, force-pushes and deletion of `main`.
+2. **Build and analysis.** The AL-Go **Pull Request Build** workflow compiles every app against a pinned Business Central artifact, with the CodeCop and UICop analyzers on. Its **Pull Request Status Check** must pass.
+3. **Automated review.** CodeRabbit reviews every pull request. Its **CodeRabbit** status must pass, and every review thread must be resolved before merge.
+4. **Merge.** Agent pull requests auto-merge once those required checks pass and the threads are resolved.
+5. **DEV.** The **CI/CD** workflow runs on `main`, builds the apps and deploys them to the DEV sandbox on its own (continuous deployment).
+6. **Promote.** After DEV is validated, `release` is fast-forwarded to that same commit on `main`.
+7. **TEST.** **Publish To Environment** deploys from `release` to the TEST sandbox. TEST accepts deployments only from `release` and is never deployed automatically, so nothing reaches TEST without passing DEV first.
 
 No production environment is configured yet.
 
-## Website intake import
+The AL is drafted by an AI agent (pull requests titled "Agent draft: …", authored by `laai-agent[bot]`). It lands only through these reviewed, checked pull requests. The repo's rules ([AGENTS.md](AGENTS.md)) say agent-written AL is never edited by hand: a finding is fixed in the agent's next draft, not patched in place.
 
-Export the `Website Intakes` worksheet from Google Sheets as CSV. In Business Central, open **Website Intakes** and choose **Import Website Intakes**. Duplicate rows are ignored using the website intake ID.
+## Engineering practices
 
-All customer, lead, quote, and order creation remains a reviewed Business Central action. Existing customers are linked directly and do not create a lead.
+- **Analyzers in every build.** `enableCodeCop` and `enableUICop` in `.github/AL-Go-Settings.json`.
+- **Pinned BC artifact.** `.AL-Go/settings.json` pins the sandbox version the build compiles against, so builds are repeatable and hit the artifact cache.
+- **Extensible enums.** The `LeadExtension` enums and `LAAI Time Entry Status` are `Extensible = true`, so another app can add values. The review notes flag `LAAI Time Type` as still closed.
+- **Versioned API pages.** Every API page has a publisher, group and `APIVersion` (`v1.0`), and is `Extensible = false`, so a breaking change means a new version.
+- **Integration events.** `LAAI Website Intake Mgt`, `LAAI Post Time Entries` and `LAAI Time Sheet Entries` raise `OnBefore`/`OnAfter` events with `IsHandled`, so other apps can extend them.
+- **Permission sets.** Each app ships its own permission sets, including read-only ones for API access.
+- **App-only auth for data loads.** The **Import Leads** and **Apply BC Config** workflows request a GitHub OIDC token and exchange it for a Business Central token through federated credentials. No client secret is stored.
+- **Written review.** [docs/code-review.md](docs/code-review.md) records a structure and standards review of the AL and what the next drafts should change.
 
-## Lead list import
+## Operations
 
-Externally researched lead lists (e.g. a prospect list built by an AI helper) import touchlessly via GitHub Actions - no Business Central UI steps required. Full procedure, data contract, and troubleshooting: [Lead list import](https://github.com/shiprek/TheLAAIGuy/blob/main/docs/lead-list-import.md) in the Integration Playbooks repository.
-
-Quick reference:
-
-1. Convert the list to `data/leads/<batch-id>.json` (see `data/leads/2026-09-14-la-small-business.json` for the format) and commit it.
-2. `gh workflow run ImportLeads.yaml --ref <main|release> -f environmentName=<DEV|TEST> -f leadsFile=data/leads/<batch-id>.json`
-3. Re-running the same batch file is safe - it's create-only and skips any Company Name already present, never updates or deletes.
-4. `gh run download <run-id> -n import-results` retrieves each row's BC-assigned `No.` (for building a spreadsheet back for the setup user).
-
-The `LAAI Lead API` (page 50108) reuses the same app-only auth pattern (federated OIDC, `API.ReadWrite.All`, per-environment `LAAI LEADS` permission set, company selected by name not index) documented for `LAAI Customer Posting Grp API` in the Integration Playbooks repo's GitHub-to-Business-Central playbook.
-
-## Code review
-
-A structure and standards review from 3 October 2026 is in [docs/code-review.md](docs/code-review.md). It records findings only. It does not change how the code runs.
+Build, deploy, and data-load steps are in [docs/operations.md](docs/operations.md).
